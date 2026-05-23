@@ -162,39 +162,34 @@ function Nav() {
 }
 
 function HeroCTA() {
-  const waHref = waLink(
-    "Halo Apamurahbanget, saya tertarik sewa villa di Batu. Mohon info ketersediaan & harga.",
-  );
+  const [q, setQ] = useState("");
+  const navigate = useNavigate();
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-            Pesan langsung, balasan cepat
-          </p>
-          <p className="mt-1 text-sm font-semibold text-foreground sm:text-base">
-            Tim kami siap bantu cari villa terbaik di Batu untukmu.
-          </p>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        navigate({ to: "/villas", search: { ...DEFAULT_SEARCH, q } });
+      }}
+      className="rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-card)] sm:p-4"
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-1 items-center gap-2 rounded-xl bg-background px-4 py-3">
+          <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Cari villa, area, atau fasilitas di Batu…"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          />
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Chat WhatsApp
-          </a>
-          <a
-            href="#villas"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-5 py-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Lihat Villa
-          </a>
-        </div>
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-90"
+        >
+          <Search className="h-4 w-4" /> Cari Villa
+        </button>
       </div>
-    </div>
+    </form>
   );
 }
 
@@ -250,22 +245,20 @@ function Locations() {
             Dari pusat kota sampai pegunungan—pilih suasana liburanmu.
           </p>
         </div>
-        <a
-          href={waLink("Halo, saya mau tanya semua area villa di Batu.")}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/villas"
+          search={DEFAULT_SEARCH}
           className="hidden items-center gap-1 whitespace-nowrap text-sm font-medium text-primary hover:underline sm:inline-flex"
         >
-          Tanya Area <ArrowRight className="h-4 w-4" />
-        </a>
+          Lihat Semua <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
         {areas.map((l) => (
-          <a
+          <Link
             key={l.name}
-            href={waLink(`Halo, saya tertarik villa di area ${l.name}, Batu.`)}
-            target="_blank"
-            rel="noopener noreferrer"
+            to="/villas"
+            search={{ ...DEFAULT_SEARCH, area: [l.name] }}
             className="group relative overflow-hidden rounded-2xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)] sm:p-5"
           >
             <div className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:right-4 sm:top-4">
@@ -276,7 +269,7 @@ function Locations() {
               <p className="mt-1 text-xs text-muted-foreground">{l.count}</p>
               <p className="mt-3 text-sm font-medium text-primary sm:mt-4">Mulai {l.from}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
