@@ -72,12 +72,6 @@ function Logo() {
 }
 
 function Nav() {
-  const items = [
-    { label: "Villa", href: "#villas" },
-    { label: "Area", href: "#areas" },
-    { label: "Tentang", href: "#about" },
-    { label: "Kontak", href: "#contact" },
-  ];
   const [open, setOpen] = useState(false);
   const waHref = waLink(
     "Halo Apamurahbanget, saya mau tanya ketersediaan villa di Batu.",
@@ -87,15 +81,16 @@ function Nav() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Logo />
         <nav className="hidden items-center gap-8 lg:flex">
-          {items.map((i) => (
-            <a
-              key={i.label}
-              href={i.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {i.label}
-            </a>
-          ))}
+          <Link
+            to="/villas"
+            search={DEFAULT_SEARCH}
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Semua Villa
+          </Link>
+          <a href="#areas" className="text-sm text-muted-foreground hover:text-foreground">Area</a>
+          <a href="#about" className="text-sm text-muted-foreground hover:text-foreground">Tentang</a>
+          <a href="#contact" className="text-sm text-muted-foreground hover:text-foreground">Kontak</a>
         </nav>
         <div className="flex items-center gap-2">
           <a
@@ -119,16 +114,17 @@ function Nav() {
         <div className="lg:hidden border-t border-border bg-background">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
             <nav className="flex flex-col">
-              {items.map((i) => (
-                <a
-                  key={i.label}
-                  href={i.href}
-                  onClick={() => setOpen(false)}
-                  className="border-b border-border/60 py-3 text-sm text-foreground last:border-b-0"
-                >
-                  {i.label}
-                </a>
-              ))}
+              <Link
+                to="/villas"
+                search={DEFAULT_SEARCH}
+                onClick={() => setOpen(false)}
+                className="border-b border-border/60 py-3 text-sm text-foreground"
+              >
+                Semua Villa
+              </Link>
+              <a href="#areas" onClick={() => setOpen(false)} className="border-b border-border/60 py-3 text-sm text-foreground">Area</a>
+              <a href="#about" onClick={() => setOpen(false)} className="border-b border-border/60 py-3 text-sm text-foreground">Tentang</a>
+              <a href="#contact" onClick={() => setOpen(false)} className="py-3 text-sm text-foreground">Kontak</a>
             </nav>
             <div className="mt-4 flex flex-col gap-2">
               <a
