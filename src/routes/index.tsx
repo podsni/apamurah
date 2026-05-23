@@ -526,52 +526,183 @@ function Experience() {
   );
 }
 
+function Contact() {
+  const waHref = waLink(
+    "Halo Apamurahbanget, saya ingin pesan villa di Batu.",
+  );
+  return (
+    <section
+      id="contact"
+      className="scroll-mt-20 border-t border-border bg-background"
+    >
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-card to-accent/10 p-6 sm:p-10">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-12">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
+                <MessageCircle className="h-3.5 w-3.5 text-primary" /> Booking Langsung
+              </span>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+                Pesan villa di Batu lewat WhatsApp.
+              </h2>
+              <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+                Tim kami akan bantu cek ketersediaan, kirim foto detail, dan
+                bantuin proses booking dari awal sampai check-in.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] hover:opacity-90"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat di WhatsApp
+                </a>
+                <a
+                  href={`tel:+${WA_NUMBER}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-medium text-foreground hover:bg-secondary"
+                >
+                  <Phone className="h-4 w-4" />
+                  {WA_DISPLAY}
+                </a>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <span className="text-xs text-muted-foreground">Ikuti kami:</span>
+                <a
+                  href={IG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary"
+                >
+                  <Instagram className="h-4 w-4" /> @apamurahbanget_
+                </a>
+                <a
+                  href={TIKTOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:bg-secondary"
+                >
+                  <Music2 className="h-4 w-4" /> @apamurahbanget_
+                </a>
+              </div>
+            </div>
+            <ul className="grid gap-3">
+              {[
+                { icon: BedDouble, label: "Berbagai tipe villa", desc: "Mulai 2 KT sampai 5+ KT untuk rombongan." },
+                { icon: Bath, label: "Fasilitas lengkap", desc: "Kolam pribadi, BBQ, karaoke, dan view gunung." },
+                { icon: Users, label: "Cocok keluarga & grup", desc: "Pilihan villa untuk 4–20 tamu." },
+              ].map((f) => (
+                <li
+                  key={f.label}
+                  className="flex items-start gap-3 rounded-2xl border border-border bg-card/80 p-4 backdrop-blur"
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                    <f.icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="text-sm font-semibold text-foreground">{f.label}</div>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{f.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
-  const cols = [
-    {
-      title: "Apamurahbanget",
-      links: ["Tentang Kami", "Karier", "Pers", "Kontak"],
-    },
-    {
-      title: "Layanan",
-      links: ["Cari Villa", "Destinasi", "Untuk Host", "Panduan"],
-    },
-    {
-      title: "Bantuan",
-      links: ["Pusat Bantuan", "Kebijakan Privasi", "Syarat & Ketentuan", "FAQ"],
-    },
-  ];
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
-        <div className="grid grid-cols-2 gap-8 sm:gap-10 md:grid-cols-4">
-          <div className="col-span-2 md:col-span-1">
+        <div className="grid grid-cols-1 gap-8 sm:gap-10 md:grid-cols-3">
+          <div>
             <Logo />
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-              Sewa villa jadi mudah—di mana pun liburanmu.
+              Sewa villa di Batu jadi mudah—properti terseleksi, pesan lewat
+              WhatsApp.
             </p>
-          </div>
-          {cols.map((c) => (
-            <div key={c.title}>
-              <h4 className="text-sm font-semibold text-foreground">{c.title}</h4>
-              <ul className="mt-4 space-y-2.5">
-                {c.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div className="mt-4 flex items-center gap-2">
+              <a
+                href={IG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Apamurahbanget"
+                className="grid h-9 w-9 place-items-center rounded-md border border-border bg-card text-foreground hover:bg-secondary"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok Apamurahbanget"
+                className="grid h-9 w-9 place-items-center rounded-md border border-border bg-card text-foreground hover:bg-secondary"
+              >
+                <Music2 className="h-4 w-4" />
+              </a>
+              <a
+                href={waLink("Halo Apamurahbanget!")}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp Apamurahbanget"
+                className="grid h-9 w-9 place-items-center rounded-md border border-border bg-card text-foreground hover:bg-secondary"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
             </div>
-          ))}
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-foreground">Jelajahi</h4>
+            <ul className="mt-4 space-y-2.5">
+              <li><a href="#villas" className="text-sm text-muted-foreground hover:text-foreground">Villa di Batu</a></li>
+              <li><a href="#areas" className="text-sm text-muted-foreground hover:text-foreground">Area Populer</a></li>
+              <li><a href="#about" className="text-sm text-muted-foreground hover:text-foreground">Tentang Kami</a></li>
+              <li><a href="#contact" className="text-sm text-muted-foreground hover:text-foreground">Kontak</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-foreground">Hubungi Kami</h4>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-primary" />
+                <a href={`tel:+${WA_NUMBER}`} className="hover:text-foreground">{WA_DISPLAY}</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MessageCircle className="h-4 w-4 text-primary" />
+                <a href={waLink("Halo Apamurahbanget!")} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">WhatsApp 24/7</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span>Kota Batu, Jawa Timur</span>
+              </li>
+            </ul>
+          </div>
         </div>
         <div className="mt-10 flex flex-col justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:mt-12 sm:flex-row">
           <span>© 2026 Apamurahbanget. Semua hak dilindungi.</span>
-          <span>Dibuat dengan teliti di Jakarta.</span>
+          <span>Dibuat dengan teliti untuk liburanmu di Batu.</span>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FloatingWhatsApp() {
+  return (
+    <a
+      href={waLink("Halo Apamurahbanget, saya mau tanya villa di Batu.")}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat WhatsApp Apamurahbanget"
+      className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:scale-105 sm:bottom-6 sm:right-6"
+    >
+      <MessageCircle className="h-5 w-5" />
+      <span className="hidden sm:inline">Chat WhatsApp</span>
+    </a>
   );
 }
 
@@ -584,7 +715,9 @@ function Index() {
       <Stats />
       <Villas />
       <Experience />
+      <Contact />
       <Footer />
+      <FloatingWhatsApp />
     </main>
   );
 }
