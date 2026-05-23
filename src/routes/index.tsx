@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import heroImg from "@/assets/hero-villa.jpg";
+import heroImg from "@/assets/hero-villa-batu.jpg";
 import villa1 from "@/assets/villa-1.jpg";
 import villa2 from "@/assets/villa-2.jpg";
 import villa3 from "@/assets/villa-3.jpg";
 import {
-  Search,
   MapPin,
-  CalendarDays,
   Users,
+  BedDouble,
+  Bath,
   ShieldCheck,
   Sparkles,
   Palmtree,
@@ -19,62 +19,75 @@ import {
   Check,
   Menu,
   X,
-  Waves,
+  Mountain,
+  MessageCircle,
+  Instagram,
+  Music2,
+  Phone,
 } from "lucide-react";
+
+const WA_NUMBER = "6281336664592";
+const WA_DISPLAY = "+62 813-3666-4592";
+const IG_URL = "https://www.instagram.com/apamurahbanget_/";
+const TIKTOK_URL = "https://www.tiktok.com/@apamurahbanget_";
+
+function waLink(message: string) {
+  return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+}
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const locations = [
-  { name: "Bali", from: "Rp 1,2 jt", count: "1.420 villa" },
-  { name: "Bandung", from: "Rp 850 rb", count: "640 villa" },
-  { name: "Yogyakarta", from: "Rp 700 rb", count: "520 villa" },
-  { name: "Lombok", from: "Rp 1,1 jt", count: "380 villa" },
-  { name: "Puncak", from: "Rp 950 rb", count: "720 villa" },
+const areas = [
+  { name: "Songgoriti", from: "Rp 850 rb", count: "32 villa" },
+  { name: "Batu Kota", from: "Rp 1,1 jt", count: "48 villa" },
+  { name: "Bumiaji", from: "Rp 950 rb", count: "26 villa" },
+  { name: "Pujon", from: "Rp 1,3 jt", count: "18 villa" },
+  { name: "Coban Rondo", from: "Rp 1,4 jt", count: "14 villa" },
 ];
 
 const villas = [
   {
     img: villa1,
     tag: "Populer",
-    name: "Villa Asana Tropis",
-    address: "Canggu, Bali",
+    name: "Villa Asana Pinus",
+    address: "Songgoriti, Batu",
     rating: 4.9,
     reviews: 184,
     specs: ["3 KT", "3 KM", "6 Tamu", "Private Pool"],
-    chips: ["Kolam Pribadi", "Taman", "BBQ", "Wi-Fi"],
-    price: "Rp 2.450.000",
+    chips: ["Kolam Pribadi", "Karaoke", "BBQ", "Wi-Fi"],
+    price: "Rp 1.850.000",
   },
   {
     img: villa2,
     tag: "Baru",
-    name: "Cliffside Ocean Villa",
-    address: "Uluwatu, Bali",
+    name: "Villa Bukit Pandang",
+    address: "Bumiaji, Batu",
     rating: 4.8,
     reviews: 96,
     specs: ["4 KT", "4 KM", "8 Tamu", "Infinity Pool"],
-    chips: ["Ocean View", "Chef", "Sunset Deck"],
-    price: "Rp 4.900.000",
+    chips: ["Mountain View", "Pemanas Air", "Sunset Deck"],
+    price: "Rp 2.450.000",
   },
   {
     img: villa3,
     tag: "Hemat",
-    name: "Pinewood Hill Villa",
-    address: "Lembang, Bandung",
+    name: "Villa Pinewood Coban",
+    address: "Pujon, Batu",
     rating: 4.7,
     reviews: 132,
-    specs: ["3 KT", "2 KM", "6 Tamu", "Mountain View"],
-    chips: ["Pemandangan Gunung", "Perapian", "Wi-Fi"],
-    price: "Rp 1.350.000",
+    specs: ["2 KT", "2 KM", "4 Tamu", "Mountain View"],
+    chips: ["Perapian", "Taman", "Wi-Fi"],
+    price: "Rp 950.000",
   },
 ];
 
 const stats = [
-  { value: "3.200+", label: "Villa Terverifikasi" },
+  { value: "120+", label: "Villa di Batu" },
   { value: "98%", label: "Tamu Puas" },
-  { value: "12 rb+", label: "Review Positif" },
-  { value: "24/7", label: "Layanan Bantuan" },
+  { value: "5 rb+", label: "Tamu Menginap" },
+  { value: "24/7", label: "Respons WhatsApp" },
 ];
 
 function Logo() {
@@ -91,8 +104,16 @@ function Logo() {
 }
 
 function Nav() {
-  const items = ["Cari Villa", "Destinasi", "Panduan", "Tentang Kami"];
+  const items = [
+    { label: "Villa", href: "#villas" },
+    { label: "Area", href: "#areas" },
+    { label: "Tentang", href: "#about" },
+    { label: "Kontak", href: "#contact" },
+  ];
   const [open, setOpen] = useState(false);
+  const waHref = waLink(
+    "Halo Apamurahbanget, saya mau tanya ketersediaan villa di Batu.",
+  );
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -100,21 +121,23 @@ function Nav() {
         <nav className="hidden items-center gap-8 lg:flex">
           {items.map((i) => (
             <a
-              key={i}
-              href="#"
+              key={i.label}
+              href={i.href}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              {i}
+              {i.label}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <button className="hidden rounded-md px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary md:inline-flex">
-            Masuk
-          </button>
-          <button className="hidden md:inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90">
-            Daftar
-          </button>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90"
+          >
+            <MessageCircle className="h-4 w-4" /> Pesan via WhatsApp
+          </a>
           <button
             aria-label={open ? "Tutup menu" : "Buka menu"}
             onClick={() => setOpen((v) => !v)}
@@ -130,22 +153,42 @@ function Nav() {
             <nav className="flex flex-col">
               {items.map((i) => (
                 <a
-                  key={i}
-                  href="#"
+                  key={i.label}
+                  href={i.href}
                   onClick={() => setOpen(false)}
                   className="border-b border-border/60 py-3 text-sm text-foreground last:border-b-0"
                 >
-                  {i}
+                  {i.label}
                 </a>
               ))}
             </nav>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <button className="rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground">
-                Masuk
-              </button>
-              <button className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground">
-                Daftar
-              </button>
+            <div className="mt-4 flex flex-col gap-2">
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+              >
+                <MessageCircle className="h-4 w-4" /> Pesan via WhatsApp
+              </a>
+              <div className="flex items-center gap-2">
+                <a
+                  href={IG_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2.5 text-xs font-medium text-foreground"
+                >
+                  <Instagram className="h-4 w-4" /> Instagram
+                </a>
+                <a
+                  href={TIKTOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2.5 text-xs font-medium text-foreground"
+                >
+                  <Music2 className="h-4 w-4" /> TikTok
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -154,43 +197,37 @@ function Nav() {
   );
 }
 
-function SearchBar() {
-  const fieldClass =
-    "flex flex-col gap-1 px-4 py-3 text-left transition-colors hover:bg-secondary/60 md:border-r md:border-border md:last:border-r-0 border-b border-border last:border-b-0 md:border-b-0";
-  const labelClass = "text-[11px] font-medium uppercase tracking-wide text-muted-foreground flex items-center gap-1";
-  const valueClass = "text-sm font-medium text-foreground";
+function HeroCTA() {
+  const waHref = waLink(
+    "Halo Apamurahbanget, saya tertarik sewa villa di Batu. Mohon info ketersediaan & harga.",
+  );
   return (
-    <div className="rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-card)]">
-      <div className="grid grid-cols-1 overflow-hidden rounded-xl bg-card md:grid-cols-[1.2fr_1fr_1fr_1fr_auto]">
-        <button className={fieldClass}>
-          <span className={labelClass}>
-            <MapPin className="h-3 w-3" /> Lokasi
-          </span>
-          <span className={valueClass}>Bali, Indonesia</span>
-        </button>
-        <button className={fieldClass}>
-          <span className={labelClass}>
-            <CalendarDays className="h-3 w-3" /> Check-in
-          </span>
-          <span className={valueClass}>12 Jun 2026</span>
-        </button>
-        <button className={fieldClass}>
-          <span className={labelClass}>
-            <CalendarDays className="h-3 w-3" /> Check-out
-          </span>
-          <span className={valueClass}>16 Jun 2026</span>
-        </button>
-        <button className={fieldClass}>
-          <span className={labelClass}>
-            <Users className="h-3 w-3" /> Tamu
-          </span>
-          <span className={valueClass}>4 Tamu</span>
-        </button>
-        <div className="p-2 md:col-span-1">
-          <button className="inline-flex h-full w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90">
-            <Search className="h-4 w-4" />
-            Cari Villa
-          </button>
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            Pesan langsung, balasan cepat
+          </p>
+          <p className="mt-1 text-sm font-semibold text-foreground sm:text-base">
+            Tim kami siap bantu cari villa terbaik di Batu untukmu.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-opacity hover:opacity-90"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Chat WhatsApp
+          </a>
+          <a
+            href="#villas"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-5 py-3 text-sm font-medium text-foreground hover:bg-secondary"
+          >
+            Lihat Villa
+          </a>
         </div>
       </div>
     </div>
@@ -204,7 +241,7 @@ function Hero() {
         <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl">
           <img
             src={heroImg}
-            alt="Villa tropis mewah dengan kolam infinity menghadap laut saat matahari terbenam"
+            alt="Villa mewah di Batu Malang dengan kolam infinity menghadap perbukitan saat matahari terbenam"
             width={1920}
             height={1080}
             className="h-[480px] w-full object-cover sm:h-[560px] md:h-[620px]"
@@ -213,23 +250,24 @@ function Hero() {
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-2xl px-5 sm:px-8 md:px-14">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                <Sparkles className="h-3.5 w-3.5" /> 3.200+ villa terverifikasi
+                <Sparkles className="h-3.5 w-3.5" /> 120+ villa pilihan di Batu
               </span>
               <h1 className="mt-4 text-[2rem] font-semibold leading-[1.05] tracking-tight text-white sm:mt-5 sm:text-4xl md:text-6xl">
-                Sewa Villa Impianmu
+                Villa Terbaik di Batu
                 <br />
-                Tanpa Ribet.
+                untuk Liburanmu.
               </h1>
               <p className="mt-4 max-w-xl text-sm text-white/85 sm:mt-5 sm:text-base md:text-lg">
-                Liburan jadi lebih tenang dengan villa pilihan di destinasi
-                terbaik Indonesia—harga jujur, booking sebentar saja.
+                Temukan villa terbaik di Batu untuk liburan Anda. Setiap
+                properti telah kami seleksi untuk memastikan kenyamanan dan
+                pengalaman menginap yang tak terlupakan bersama Apamurahbanget.
               </p>
             </div>
           </div>
         </div>
 
         <div className="relative z-10 mx-auto -mt-20 max-w-5xl px-0 sm:-mt-16 sm:px-4 md:-mt-20">
-          <SearchBar />
+          <HeroCTA />
         </div>
       </div>
     </section>
@@ -238,28 +276,32 @@ function Hero() {
 
 function Locations() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+    <section id="areas" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
       <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
         <div>
           <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Destinasi Populer
+            Area Populer di Batu
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Mulai dari pantai, gunung, sampai pedesaan—pilih suasanamu.
+            Dari pusat kota sampai pegunungan—pilih suasana liburanmu.
           </p>
         </div>
         <a
-          href="#"
+          href={waLink("Halo, saya mau tanya semua area villa di Batu.")}
+          target="_blank"
+          rel="noopener noreferrer"
           className="hidden items-center gap-1 whitespace-nowrap text-sm font-medium text-primary hover:underline sm:inline-flex"
         >
-          Lihat Semua <ArrowRight className="h-4 w-4" />
+          Tanya Area <ArrowRight className="h-4 w-4" />
         </a>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
-        {locations.map((l) => (
+        {areas.map((l) => (
           <a
             key={l.name}
-            href="#"
+            href={waLink(`Halo, saya tertarik villa di area ${l.name}, Batu.`)}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group relative overflow-hidden rounded-2xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)] sm:p-5"
           >
             <div className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:right-4 sm:top-4">
