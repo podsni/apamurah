@@ -173,7 +173,7 @@ function VillasList() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 pb-44 pt-5 sm:px-6 sm:pb-10 sm:pt-8">
+      <div className="mx-auto max-w-7xl px-4 pb-36 pt-5 sm:px-6 sm:pb-10 sm:pt-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Link
@@ -371,9 +371,9 @@ function VillasList() {
         </div>
       )}
 
-      {/* Mobile filter/sort bar — fused with bottom nav */}
+      {/* Mobile bottom bar */}
       <div className="fixed inset-x-0 bottom-0 z-30 lg:hidden">
-        {/* Filter/Sort/WA row */}
+        {/* Filter/Sort row — no duplicate WA button */}
         <div className="border-t border-border/50 bg-background/95 px-3 pt-2 pb-1 backdrop-blur-md">
           <div className="mx-auto flex max-w-md items-center gap-2">
             <button
@@ -383,7 +383,7 @@ function VillasList() {
               <SlidersHorizontal className="h-4 w-4" />
               Filter
               {activeCount > 0 && (
-                <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">
+                <span className="ml-0.5 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">
                   {activeCount}
                 </span>
               )}
@@ -395,16 +395,6 @@ function VillasList() {
               <ArrowUpDown className="h-4 w-4" />
               Urutkan
             </button>
-            <a
-              href="https://wa.me/6281336664592?text=Halo%20Apamurahbanget%2C%20saya%20mau%20tanya%20villa%20di%20Batu."
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Chat WhatsApp"
-              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-[#25D366] px-4 text-sm font-semibold text-white shadow-sm"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WA
-            </a>
           </div>
         </div>
         {/* Bottom nav tabs */}
