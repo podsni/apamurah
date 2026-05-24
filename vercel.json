@@ -1,16 +1,20 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "buildCommand": "bun run build",
+  "version": 2,
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist/client",
   "functions": {
-    "api/[[...path]].ts": {
-      "runtime": "edge"
+    "api/index.ts": {
+      "includeFiles": "dist/server/**"
     }
   },
   "routes": [
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "api/[[...path]].ts"
+      "dest": "/api/index"
     }
   ]
 }
