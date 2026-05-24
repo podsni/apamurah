@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 
 function NotFoundComponent() {
   return (
@@ -113,7 +114,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <div className="pb-16 lg:pb-0">
+        <Outlet />
+      </div>
+      <MobileBottomNav />
     </QueryClientProvider>
   );
 }
