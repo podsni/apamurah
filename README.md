@@ -197,12 +197,14 @@ Nomor WA wajib dalam format internasional tanpa `+` (contoh: `62…`).
 
 ### Vercel
 
-Repo ini sudah disiapkan untuk Vercel via file `vercel.json`:
+Repo ini sudah disiapkan untuk Vercel via file `vercel.json` dengan
+runtime **Edge Function**:
 
 - Build command: `bun run build`
-- Output directory: `dist/client`
-- Rewrite semua route ke `index.html` agar route TanStack Router seperti
-  `/villas` dan `/villas/:slug` tetap bekerja saat reload direct URL.
+- Semua request (`/(.*)`) diarahkan ke `api/[[...path]].ts`
+- Handler Edge memanggil `src/server.ts` (TanStack Start server) sehingga
+  SSR route seperti `/`, `/villas`, dan `/villas/:slug` tidak 404 saat
+  direct reload.
 
 Langkah deploy:
 
