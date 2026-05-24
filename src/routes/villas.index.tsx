@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Palmtree,
   MessageCircle,
+  ArrowUpDown,
 } from "lucide-react";
 import {
   AREAS,
@@ -62,6 +63,7 @@ function VillasList() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/villas" });
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
   const [qInput, setQInput] = useState(search.q);
 
   const values: FilterValues = {
@@ -147,14 +149,14 @@ function VillasList() {
               e.preventDefault();
               navigate({ search: (prev: SearchValues) => ({ ...prev, q: qInput }), replace: true });
             }}
-            className="flex flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-[var(--shadow-soft)] sm:max-w-md"
+            className="flex h-11 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 shadow-[var(--shadow-soft)] sm:max-w-md"
           >
             <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
             <input
               value={qInput}
               onChange={(e) => setQInput(e.target.value)}
               type="search"
-              placeholder="Cari villa, area, fasilitas…"
+              placeholder="Cari villa, area…"
               className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
             {qInput && (
@@ -174,7 +176,7 @@ function VillasList() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+      <div className="mx-auto max-w-7xl px-4 pb-28 pt-5 sm:px-6 sm:pb-10 sm:pt-8">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Link
@@ -190,19 +192,7 @@ function VillasList() {
               {results.length} villa ditemukan{search.q && ` untuk "${search.q}"`}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setFiltersOpen(true)}
-              className="relative inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-secondary lg:hidden"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              Filter
-              {activeCount > 0 && (
-                <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
-                  {activeCount}
-                </span>
-              )}
-            </button>
+          <div className="hidden items-center gap-2 lg:flex">
             <select
               value={search.sort}
               onChange={(e) =>
@@ -223,6 +213,51 @@ function VillasList() {
             </select>
           </div>
         </div>
+
+        {activeCount > 0 && (
+          <div className="mt-4 flex flex-wrap items-center gap-2 lg:hidden">
+            <span className="text-xs text-muted-foreground">Filter aktif:</span>
+            {search.area.map((a) => (
+              <button
+                key={a}
+                onClick={() =>
+                  handleFilterChange({ areas: search.area.filter((x) => x !== a) })
+                }
+                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
+              >
+                {a} <X className="h-3 w-3" />
+              </button>
+            ))}
+            {search.category.map((c) => (
+              <button
+                key={c}
+                onClick={() =>
+                  handleFilterChange({ categories: search.category.filter((x) => x !== c) })
+                }
+                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
+              >
+                {c} <X className="h-3 w-3" />
+              </button>
+            ))}
+            {search.amenity.map((a) => (
+              <button
+                key={a}
+                onClick={() =>
+                  handleFilterChange({ amenities: search.amenity.filter((x) => x !== a) })
+                }
+                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
+              >
+                {a} <X className="h-3 w-3" />
+              </button>
+            ))}
+            <button
+              onClick={handleReset}
+              className="text-[11px] font-medium text-primary hover:underline"
+            >
+              Bersihkan
+            </button>
+          </div>
+        )}
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
           <aside className="hidden lg:block">
@@ -254,7 +289,7 @@ function VillasList() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {results.map((v) => (
                   <VillaCard key={v.slug} villa={v} />
                 ))}
@@ -270,7 +305,8 @@ function VillasList() {
             className="absolute inset-0 bg-black/40"
             onClick={() => setFiltersOpen(false)}
           />
-          <div className="relative ml-auto flex h-full w-full max-w-sm flex-col bg-background shadow-xl">
+          <div className="relative mt-auto flex max-h-[88vh] w-full flex-col rounded-t-2xl bg-background shadow-xl">
+            <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-muted" />
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <h2 className="text-sm font-semibold text-foreground">Filter Villa</h2>
               <button
@@ -284,7 +320,7 @@ function VillasList() {
             <div className="flex-1 overflow-y-auto p-5">
               <VillaFilters values={values} onChange={handleFilterChange} onReset={handleReset} />
             </div>
-            <div className="border-t border-border p-4">
+            <div className="border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <button
                 onClick={() => setFiltersOpen(false)}
                 className="w-full rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
@@ -296,12 +332,89 @@ function VillasList() {
         </div>
       )}
 
+      {sortOpen && (
+        <div className="fixed inset-0 z-50 flex lg:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setSortOpen(false)} />
+          <div className="relative mt-auto w-full rounded-t-2xl bg-background pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl">
+            <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-muted" />
+            <div className="px-4 py-3 text-sm font-semibold text-foreground">Urutkan</div>
+            <div className="flex flex-col">
+              {[
+                { v: "recommended", l: "Rekomendasi" },
+                { v: "price-asc", l: "Harga Termurah" },
+                { v: "price-desc", l: "Harga Termahal" },
+                { v: "rating", l: "Rating Tertinggi" },
+              ].map((opt) => {
+                const active = search.sort === opt.v;
+                return (
+                  <button
+                    key={opt.v}
+                    onClick={() => {
+                      navigate({
+                        search: (prev: SearchValues) => ({
+                          ...prev,
+                          sort: opt.v as SearchValues["sort"],
+                        }),
+                        replace: true,
+                      });
+                      setSortOpen(false);
+                    }}
+                    className={
+                      "flex items-center justify-between px-4 py-3.5 text-left text-sm " +
+                      (active ? "font-semibold text-primary" : "text-foreground")
+                    }
+                  >
+                    {opt.l}
+                    {active && <span className="text-primary">✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile bottom action bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center gap-2">
+          <button
+            onClick={() => setFiltersOpen(true)}
+            className="relative inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card text-sm font-semibold text-foreground"
+          >
+            <SlidersHorizontal className="h-4 w-4" />
+            Filter
+            {activeCount > 0 && (
+              <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+                {activeCount}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setSortOpen(true)}
+            className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card text-sm font-semibold text-foreground"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+            Urutkan
+          </button>
+          <a
+            href="https://wa.me/6281336664592?text=Halo%20Apamurahbanget%2C%20saya%20mau%20tanya%20villa%20di%20Batu."
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chat WhatsApp"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 text-sm font-semibold text-white shadow-md"
+          >
+            <MessageCircle className="h-5 w-5" />
+            WA
+          </a>
+        </div>
+      </div>
+
       <a
         href="https://wa.me/6281336664592?text=Halo%20Apamurahbanget%2C%20saya%20mau%20tanya%20villa%20di%20Batu."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat WhatsApp"
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:scale-105"
+        className="fixed bottom-5 right-5 z-40 hidden items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:scale-105 lg:inline-flex"
       >
         <MessageCircle className="h-5 w-5" />
         <span className="hidden sm:inline">Chat WhatsApp</span>
