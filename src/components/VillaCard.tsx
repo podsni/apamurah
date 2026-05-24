@@ -1,10 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { Star, BedDouble, Bath, Users } from "lucide-react";
+import { Star, BedDouble, Bath, Users, Heart } from "lucide-react";
 import type { Villa } from "@/data/villas";
 import { formatIDR } from "@/data/villas";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { useFavorites } from "@/hooks/use-favorites";
 
 export function VillaCard({ villa }: { villa: Villa }) {
+  const { isFavorite, toggle } = useFavorites();
+  const fav = isFavorite(villa.slug);
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl bg-card shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
       <Link
@@ -30,12 +34,26 @@ export function VillaCard({ villa }: { villa: Villa }) {
         </div>
       </Link>
       <div className="flex flex-1 flex-col p-5">
-        <Link to="/villas/$slug" params={{ slug: villa.slug }} className="block">
-          <h3 className="text-base font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
-            {villa.name}
-          </h3>
-          <p className="mt-1 text-xs text-muted-foreground">{villa.area}, Batu</p>
-        </Link>
+        <div className="flex items-start justify-between gap-2">
+          <Link to="/villas/$slug" params={{ slug: villa.slug }} className="block min-w-0">
+            <h3 className="text-base font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
+              {villa.name}
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground">{villa.area}, Batu</p>
+          </Link>
+          <button
+            onClick={() => toggle(villa.slug)}
+            aria-label={fav ? "Hapus dari favorit" : "Tambah ke favorit"}
+            className="mt-0.5 shrink-0 grid h-8 w-8 place-items-center rounded-full transition-all duration-200 hover:bg-red-50 active:scale-90"
+          >
+            <Heart
+              className={
+                "h-5 w-5 transition-all duration-200 " +
+                (fav ? "fill-red-500 stroke-red-500" : "stroke-muted-foreground")
+              }
+            />
+          </button>
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1">
             <BedDouble className="h-3.5 w-3.5" /> {villa.bedrooms} KT
