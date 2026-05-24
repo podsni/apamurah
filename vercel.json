@@ -13,6 +13,10 @@
       "dest": "/assets/$1"
     },
     {
+      "src": "/(favicon\\.svg|favicon-32\\.png|apple-touch-icon\\.png|og-image\\.png|og-image\\.svg|robots\\.txt|sitemap\\.xml)",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index"
     }
