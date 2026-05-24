@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f3460;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#1e5fa8;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0a1628;stop-opacity:0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative mountain/landscape shapes -->
+  <ellipse cx="900" cy="700" rx="600" ry="350" fill="#0d2d5e" opacity="0.5"/>
+  <ellipse cx="200" cy="650" rx="400" ry="280" fill="#163a6e" opacity="0.4"/>
+
+  <!-- Villa silhouette -->
+  <!-- Main house body -->
+  <rect x="480" y="280" width="240" height="160" fill="white" opacity="0.12"/>
+  <!-- Roof -->
+  <polygon points="460,280 600,180 740,280" fill="white" opacity="0.18"/>
+  <!-- Door -->
+  <rect x="575" y="360" width="50" height="80" fill="white" opacity="0.2"/>
+  <!-- Windows -->
+  <rect x="495" y="305" width="55" height="45" rx="4" fill="white" opacity="0.25"/>
+  <rect x="650" y="305" width="55" height="45" rx="4" fill="white" opacity="0.25"/>
+  <!-- Chimney -->
+  <rect x="680" y="200" width="25" height="60" fill="white" opacity="0.15"/>
+
+  <!-- Pool hint -->
+  <ellipse cx="600" cy="470" rx="120" ry="20" fill="#4a9edd" opacity="0.3"/>
+
+  <!-- Logo icon top-left -->
+  <circle cx="80" cy="80" r="36" fill="white" opacity="0.15"/>
+  <polygon points="80,52 104,72 56,72" fill="white" opacity="0.9"/>
+  <rect x="60" y="72" width="40" height="26" fill="white" opacity="0.9"/>
+  <rect x="73" y="82" width="14" height="16" fill="#1e5fa8"/>
+
+  <!-- Brand name -->
+  <text x="130" y="72" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="white" opacity="0.95">Apa</text>
+  <text x="172" y="72" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#7ec8f0">murah</text>
+  <text x="280" y="72" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="white" opacity="0.95">banget</text>
+
+  <!-- Main headline -->
+  <text x="600" y="530" font-family="Georgia, serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle" opacity="0.97">Sewa Villa Terbaik di Batu Malang</text>
+
+  <!-- Subtext -->
+  <text x="600" y="585" font-family="Arial, sans-serif" font-size="26" fill="white" text-anchor="middle" opacity="0.75">Properti terseleksi · Harga jujur · Pesan via WhatsApp</text>
+
+  <!-- Bottom accent line -->
+  <rect x="500" y="608" width="200" height="3" rx="2" fill="#7ec8f0" opacity="0.6"/>
+</svg>

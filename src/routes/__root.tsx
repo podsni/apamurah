@@ -80,17 +80,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Temukan villa terbaik di Batu untuk liburan Anda. Properti terseleksi, harga jujur, pesan cepat lewat WhatsApp bersama Apamurahbanget.",
       },
       { name: "author", content: "Apamurahbanget" },
+      // Open Graph
       { property: "og:title", content: "Apamurahbanget — Sewa Villa Terbaik di Batu Malang" },
       {
         property: "og:description",
         content:
-          "Villa pilihan di Batu untuk pengalaman menginap tak terlupakan. Booking mudah via WhatsApp.",
+          "Villa pilihan di Batu untuk pengalaman menginap tak terlupakan. Properti terseleksi, harga jujur, booking mudah via WhatsApp.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:url", content: "https://sewavilla.vercel.app" },
+      { property: "og:image", content: "https://sewavilla.vercel.app/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Apamurahbanget — Sewa Villa Terbaik di Batu Malang" },
+      { property: "og:site_name", content: "Apamurahbanget" },
+      { property: "og:locale", content: "id_ID" },
+      // Twitter / X
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Apamurahbanget — Sewa Villa Terbaik di Batu Malang" },
+      {
+        name: "twitter:description",
+        content:
+          "Villa pilihan di Batu untuk pengalaman menginap tak terlupakan. Booking mudah via WhatsApp.",
+      },
+      { name: "twitter:image", content: "https://sewavilla.vercel.app/og-image.png" },
     ],
     links: [
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
