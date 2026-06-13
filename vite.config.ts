@@ -12,4 +12,10 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      // Required for Cloudflare Quick Tunnel previews (*.trycloudflare.com).
+      allowedHosts: [".trycloudflare.com"],
+    },
+  },
 });

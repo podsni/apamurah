@@ -84,13 +84,13 @@ function Logo() {
 function Nav() {
   const [open, setOpen] = useState(false);
   const waHref = waLink("Halo Apamurahbanget, saya mau tanya ketersediaan villa di Batu.");
-  
+
   return (
-    <div className="fixed top-6 inset-x-0 z-50 px-4 pointer-events-none">
+    <div className="fixed inset-x-0 top-3 z-50 px-4 pointer-events-none sm:top-6">
       <header className="mx-auto max-w-7xl pointer-events-auto">
         {/* Floating Island Nav */}
-        <div className="mx-auto flex h-14 items-center justify-between px-2.5 rounded-full border border-black/5 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-2xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12)]">
-          <div className="pl-4">
+        <div className="mx-auto flex h-[3.25rem] items-center justify-between rounded-full border border-black/5 bg-white/86 px-2.5 shadow-[0_10px_36px_-18px_rgb(20_50_90/0.35)] backdrop-blur-2xl dark:border-white/10 dark:bg-black/80 sm:h-14">
+          <div className="pl-2 sm:pl-4">
             <Logo />
           </div>
 
@@ -131,10 +131,10 @@ function Nav() {
             >
               <MessageCircle className="h-4 w-4" /> Hubungi
             </a>
-            
+
             <button
               onClick={() => setOpen((v) => !v)}
-              className="grid h-11 w-11 place-items-center rounded-full bg-black/5 dark:bg-white/5 text-foreground transition-all lg:hidden"
+              className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-foreground transition-all lg:hidden sm:h-11 sm:w-11"
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -151,9 +151,9 @@ function Nav() {
                 { label: "Tentang", href: "#about" },
                 { label: "Kontak", href: "#contact" },
               ].map((item, i) => (
-                <div 
-                  key={item.label} 
-                  className="animate-fade-up" 
+                <div
+                  key={item.label}
+                  className="animate-fade-up"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   {item.to ? (
@@ -177,7 +177,7 @@ function Nav() {
                 </div>
               ))}
               <div className="mt-8 flex flex-col items-center gap-4 animate-fade-up delay-500">
-                 <a
+                <a
                   href={waHref}
                   className="inline-flex h-14 items-center gap-3 rounded-full bg-primary px-8 text-lg font-bold text-primary-foreground"
                 >
@@ -197,7 +197,7 @@ function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-[90dvh] flex items-center justify-center overflow-hidden pt-28 pb-16">
+    <section className="relative flex min-h-[min(780px,88dvh)] items-center justify-center overflow-hidden px-4 pb-12 pt-24 sm:min-h-[90dvh] sm:pb-16 sm:pt-28">
       {/* Background Cinematic Texture */}
       <div className="absolute inset-0 z-0">
         <img
@@ -209,54 +209,57 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-background" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md animate-fade-in">
+      <div className="relative z-10 mx-auto w-full max-w-7xl text-center">
+        <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md animate-fade-in sm:px-4 sm:tracking-[0.2em]">
           <Sparkles className="h-3.5 w-3.5" /> 120+ Villa Pilihan di Batu
         </div>
 
-        <h1 className="mt-8 font-serif text-[3.5rem] leading-[1.05] tracking-tight text-white sm:text-[5rem] md:text-[6.5rem] animate-fade-up">
-          Temukan Villa <br className="hidden sm:block" />
+        <h1 className="mx-auto mt-6 max-w-[11ch] font-serif text-[clamp(2.9rem,15vw,4.35rem)] leading-[0.95] tracking-[-0.045em] text-white animate-fade-up sm:mt-8 sm:max-w-none sm:text-[5rem] md:text-[6.5rem]">
+          Temukan Villa <br />
           <span className="italic text-white/90">Impianmu</span> di Batu.
         </h1>
 
-        <p className="mx-auto mt-8 max-w-2xl text-lg font-medium leading-relaxed text-white/90 sm:text-xl md:text-2xl animate-fade-up delay-200" style={{ textWrap: "balance" }}>
-          Properti terseleksi dengan harga transparan. 
-          Pesan langsung lewat WhatsApp dalam hitungan menit.
+        <p
+          className="mx-auto mt-5 max-w-[22rem] text-[0.98rem] font-medium leading-7 text-white/88 animate-fade-up delay-200 sm:mt-8 sm:max-w-2xl sm:text-xl md:text-2xl"
+          style={{ textWrap: "balance" }}
+        >
+          Properti terseleksi dengan harga transparan. Pesan langsung lewat WhatsApp dalam hitungan
+          menit.
         </p>
 
         {/* Floating Search Hub */}
-        <div className="mx-auto mt-12 max-w-2xl px-4 animate-fade-up delay-400">
+        <div className="mx-auto mt-8 max-w-2xl animate-fade-up delay-400 sm:mt-12 sm:px-4">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               navigate({ to: "/villas", search: { ...DEFAULT_SEARCH, q } });
             }}
-            className="group relative p-2 rounded-[2.5rem] bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/20 shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-white/30"
+            className="group relative rounded-[1.65rem] border border-white/20 bg-white/12 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:border-white/30 sm:rounded-[2.5rem] sm:p-2 sm:hover:scale-[1.01]"
           >
-            <div className="flex h-16 items-center gap-3 pl-6 pr-2">
-              <Search className="h-6 w-6 text-white/60" />
+            <div className="flex h-14 items-center gap-2 pl-4 pr-1.5 sm:h-16 sm:gap-3 sm:pl-6 sm:pr-2">
+              <Search className="h-5 w-5 shrink-0 text-white/65 sm:h-6 sm:w-6" />
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Cari villa atau area favoritmu..."
-                className="flex-1 bg-transparent text-lg font-medium text-white placeholder:text-white/40 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[0.95rem] font-medium text-white placeholder:text-white/48 focus:outline-none sm:text-lg"
               />
               <button
                 type="submit"
-                className="h-12 rounded-full bg-white px-8 text-sm font-black uppercase tracking-widest text-black transition-all duration-300 hover:bg-primary hover:text-white"
+                className="h-11 shrink-0 rounded-full bg-white px-5 text-xs font-black uppercase tracking-[0.14em] text-black transition-all duration-300 hover:bg-primary hover:text-white sm:h-12 sm:px-8 sm:text-sm"
               >
                 Cari
               </button>
             </div>
           </form>
-          
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+
+          <div className="mt-4 flex flex-wrap justify-center gap-2 sm:mt-6 sm:gap-3">
             {["Songgoriti", "Batu Kota", "Bumiaji"].map((area, i) => (
               <Link
                 key={area}
                 to="/villas"
                 search={{ ...DEFAULT_SEARCH, area: [area as Area] }}
-                className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-white/80 transition-all hover:bg-white/15 hover:border-white/30 animate-fade-in"
+                className="rounded-full border border-white/12 bg-white/8 px-3.5 py-1.5 text-xs font-bold text-white/82 transition-all hover:border-white/30 hover:bg-white/15 animate-fade-in sm:px-4 sm:py-2"
                 style={{ animationDelay: `${600 + i * 100}ms` }}
               >
                 {area}
@@ -265,9 +268,9 @@ function Hero() {
           </div>
         </div>
       </div>
-      
+
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
+      <div className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 animate-bounce opacity-40 sm:block">
         <div className="w-px h-12 bg-gradient-to-b from-white to-transparent" />
       </div>
     </section>
@@ -276,13 +279,13 @@ function Hero() {
 
 function Locations() {
   return (
-    <section id="areas" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
-      <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
+    <section id="areas" className="mx-auto max-w-7xl px-4 py-9 sm:px-6 sm:py-12">
+      <div className="mb-6 flex items-end justify-between gap-4 sm:mb-10">
         <div>
-          <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="font-serif text-[2rem] leading-none tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Jelajahi Area di Batu
           </h2>
-          <p className="mt-2 max-w-md text-sm text-muted-foreground sm:text-base">
+          <p className="mt-2 max-w-md text-[0.95rem] leading-6 text-muted-foreground sm:text-base">
             Dari pegunungan hingga pusat kota — pilih suasana liburanmu.
           </p>
         </div>
@@ -294,24 +297,28 @@ function Locations() {
           Lihat Semua <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 md:grid-cols-5">
         {areas.map((l, i) => (
           <Link
             key={l.name}
             to="/villas"
             search={{ ...DEFAULT_SEARCH, area: [l.name] }}
-            className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-sky)] hover:border-primary/20 sm:p-6"
+            className="group relative flex min-h-[7.25rem] items-center gap-4 overflow-hidden rounded-[1.35rem] border border-border/65 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[var(--shadow-sky)] min-[420px]:block min-[420px]:min-h-[9.25rem] min-[420px]:p-5 sm:p-6"
             style={{ animationDelay: `${i * 80}ms` }}
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/9 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground min-[420px]:h-9 min-[420px]:w-9">
               <MapPin className="h-4 w-4" />
             </span>
-            <div className="mt-3">
-              <h3 className="text-sm font-semibold text-foreground sm:text-base">{l.name}</h3>
-              <p className="mt-0.5 text-xs text-muted-foreground">{l.desc}</p>
-              <p className="mt-3 text-sm font-medium text-primary">Mulai {l.from}</p>
+            <div className="min-w-0 min-[420px]:mt-3">
+              <h3 className="text-base font-semibold leading-tight text-foreground min-[420px]:text-sm sm:text-base">
+                {l.name}
+              </h3>
+              <p className="mt-0.5 text-sm text-muted-foreground min-[420px]:text-xs">{l.desc}</p>
+              <p className="mt-1.5 text-sm font-semibold text-primary min-[420px]:mt-3 min-[420px]:font-medium">
+                Mulai {l.from}
+              </p>
             </div>
-            <ArrowRight className="absolute bottom-5 right-5 h-4 w-4 text-muted-foreground/40 transition-all duration-300 group-hover:text-primary group-hover:translate-x-0.5" />
+            <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-muted-foreground/45 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-primary min-[420px]:absolute min-[420px]:bottom-5 min-[420px]:right-5" />
           </Link>
         ))}
       </div>
@@ -346,9 +353,9 @@ function Villas() {
   const featured = getFeaturedVillas(3);
   return (
     <section id="villas" className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 scroll-mt-20">
-      <div className="mb-8 flex items-end justify-between gap-4 sm:mb-10">
+      <div className="mb-6 flex items-end justify-between gap-4 sm:mb-10">
         <div>
-          <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          <h2 className="font-serif text-[2rem] leading-none tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Villa Rekomendasi Kami
           </h2>
           <p className="mt-2 text-sm text-muted-foreground sm:text-base">
@@ -364,8 +371,8 @@ function Villas() {
         </Link>
       </div>
       <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-3">
-        {featured.map((v) => (
-          <VillaCard key={v.slug} villa={v} />
+        {featured.map((v, index) => (
+          <VillaCard key={v.slug} villa={v} priority={index === 0} />
         ))}
       </div>
       <div className="mt-8 flex justify-center sm:hidden">

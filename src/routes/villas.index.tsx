@@ -33,6 +33,13 @@ const searchSchema = z.object({
 
 type SearchValues = zType.infer<typeof searchSchema>;
 
+const SORT_OPTIONS: Array<{ v: SearchValues["sort"]; l: string }> = [
+  { v: "recommended", l: "Rekomendasi" },
+  { v: "price-asc", l: "Harga Termurah" },
+  { v: "price-desc", l: "Harga Termahal" },
+  { v: "rating", l: "Rating Tertinggi" },
+];
+
 export const Route = createFileRoute("/villas/")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
@@ -128,12 +135,11 @@ function VillasList() {
 
   return (
     <main className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20">
-      
       {/* Floating Header Hub */}
-      <div className="fixed top-6 inset-x-0 z-40 px-4 pointer-events-none">
+      <div className="fixed inset-x-0 top-4 z-40 px-4 pointer-events-none sm:top-6">
         <header className="mx-auto max-w-7xl pointer-events-auto">
-          <div className="flex h-14 items-center justify-between px-3 rounded-full border border-black/5 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-2xl shadow-lg">
-            <Link to="/" className="flex items-center gap-2 pl-3">
+          <div className="mx-auto flex h-12 w-fit items-center justify-center rounded-full border border-black/5 bg-white/86 px-2.5 shadow-[0_12px_36px_-18px_rgb(20_50_90/0.45)] backdrop-blur-2xl dark:border-white/10 dark:bg-black/80 sm:h-14 sm:w-full sm:justify-between sm:px-3">
+            <Link to="/" className="flex items-center gap-2 sm:pl-3">
               <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
                 <Palmtree className="h-4 w-4" />
               </div>
@@ -146,7 +152,10 @@ function VillasList() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                navigate({ search: (prev: SearchValues) => ({ ...prev, q: qInput }), replace: true });
+                navigate({
+                  search: (prev: SearchValues) => ({ ...prev, q: qInput }),
+                  replace: true,
+                });
               }}
               className="flex-1 max-w-md mx-4 hidden sm:block"
             >
@@ -161,42 +170,53 @@ function VillasList() {
               </div>
             </form>
 
-            <div className="flex items-center gap-2 pr-1">
-               <button
+            <div className="hidden items-center gap-1.5 pr-1 sm:flex">
+              <button
                 onClick={() => setSortOpen(true)}
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary lg:hidden"
+                className="grid h-9 w-9 place-items-center rounded-full border border-border/70 bg-card text-muted-foreground transition-all hover:bg-secondary hover:text-foreground lg:hidden"
+                aria-label="Urutkan"
               >
                 <ArrowUpDown className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => setFiltersOpen(true)}
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary lg:hidden"
+                className="inline-flex h-9 items-center gap-1.5 rounded-full border border-primary/18 bg-primary/8 px-3 text-[11px] font-bold text-primary transition-all hover:bg-primary/12 lg:hidden"
               >
                 <SlidersHorizontal className="h-3.5 w-3.5" />
+                <span>Filter</span>
                 {activeCount > 0 && (
                   <span className="grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] text-white">
                     {activeCount}
                   </span>
                 )}
               </button>
-              <WhatsAppButton size="sm" label="Konsultasi" message="Halo, saya butuh bantuan cari villa." className="rounded-full hidden md:inline-flex" />
+              <WhatsAppButton
+                size="sm"
+                label="Konsultasi"
+                message="Halo, saya butuh bantuan cari villa."
+                className="rounded-full hidden md:inline-flex"
+              />
             </div>
           </div>
         </header>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6">
-        
+      <div className="mx-auto max-w-7xl px-4 pb-28 pt-24 sm:px-6 sm:pt-28 lg:pb-16">
         {/* Page Header */}
-        <section className="mb-10 animate-fade-up">
+        <section className="mb-6 animate-fade-up sm:mb-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Link to="/" className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  to="/"
+                  className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                >
                   Beranda
                 </Link>
                 <span className="text-[10px] text-muted-foreground/40">/</span>
-                <span className="text-xs font-bold uppercase tracking-widest text-foreground">Semua Villa</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-foreground">
+                  Semua Villa
+                </span>
               </div>
               <h1 className="font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
                 Villa di Batu
@@ -205,13 +225,13 @@ function VillasList() {
                 Ditemukan {results.length} villa pilihan yang siap kamu booking.
               </p>
             </div>
-            
+
             <div className="hidden lg:block">
               <div className="relative p-1 rounded-full bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
                 <select
                   value={search.sort}
                   onChange={(e) =>
-                    handleFilterChange({ sort: e.target.value as any })
+                    handleFilterChange({ sort: e.target.value as SearchValues["sort"] })
                   }
                   className="appearance-none bg-transparent h-10 pl-5 pr-10 text-xs font-bold uppercase tracking-widest text-foreground focus:outline-none cursor-pointer"
                 >
@@ -226,8 +246,35 @@ function VillasList() {
           </div>
         </section>
 
+        <div className="sticky top-[4.75rem] z-30 mb-7 lg:hidden">
+          <div className="rounded-[1.35rem] border border-border/70 bg-background/86 p-1.5 shadow-[0_14px_34px_-24px_rgb(20_50_90/0.45)] backdrop-blur-2xl">
+            <div className="grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(true)}
+                className="press relative inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-black text-primary-foreground shadow-[0_10px_24px_-16px_rgb(20_80_160/0.65)] transition-all active:scale-[0.98]"
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+                <span>Filter</span>
+                {activeCount > 0 && (
+                  <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full border-2 border-background bg-accent px-1 text-[10px] font-black text-accent-foreground">
+                    {activeCount}
+                  </span>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSortOpen(true)}
+                className="press inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-border/80 bg-card text-sm font-black text-foreground shadow-sm transition-all hover:bg-secondary active:scale-[0.98]"
+              >
+                <ArrowUpDown className="h-4 w-4 text-primary" />
+                <span>Urutkan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr]">
-          
           {/* Sidebar Filter */}
           <aside className="hidden lg:block animate-fade-in delay-200">
             <div className="sticky top-28 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
@@ -258,12 +305,12 @@ function VillasList() {
             ) : (
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
                 {results.map((v, i) => (
-                  <div 
-                    key={v.slug} 
-                    className="animate-fade-up" 
+                  <div
+                    key={v.slug}
+                    className="animate-fade-up"
                     style={{ animationDelay: `${i * 50}ms` }}
                   >
-                    <VillaCard villa={v} />
+                    <VillaCard villa={v} priority={i === 0} />
                   </div>
                 ))}
               </div>
@@ -272,39 +319,18 @@ function VillasList() {
         </div>
       </div>
 
-      {/* Mobile Bottom Filter Bar */}
-      <div className="fixed bottom-20 inset-x-0 z-40 px-4 flex justify-center lg:hidden pointer-events-none">
-         <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto animate-fade-up">
-            <button
-              onClick={() => setFiltersOpen(true)}
-              className="flex items-center gap-2 h-11 px-6 rounded-full bg-white text-black text-xs font-black uppercase tracking-widest transition-transform active:scale-95"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              Filter
-              {activeCount > 0 && (
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] text-white">
-                  {activeCount}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setSortOpen(true)}
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white border border-white/10 transition-transform active:scale-95"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-            </button>
-         </div>
-      </div>
-
       {/* Mobile Modals */}
 
       {filtersOpen && (
         <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setFiltersOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setFiltersOpen(false)}
+          />
           <div
             role="dialog"
             aria-modal="true"
-            className="relative mt-auto flex max-h-[90vh] w-full flex-col rounded-t-[2.5rem] bg-background shadow-2xl overflow-hidden"
+            className="relative mt-auto flex max-h-[86vh] w-full flex-col overflow-hidden rounded-t-[2rem] bg-background shadow-2xl"
           >
             <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-muted" />
             <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
@@ -316,13 +342,13 @@ function VillasList() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-6 pb-24">
+            <div className="flex-1 overflow-y-auto p-4 pb-24 sm:p-6">
               <VillaFilters values={values} onChange={handleFilterChange} onReset={handleReset} />
             </div>
-            <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-background via-background to-transparent pt-10">
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-background via-background to-transparent p-4 pt-10 sm:p-6">
               <button
                 onClick={() => setFiltersOpen(false)}
-                className="w-full h-14 rounded-full bg-primary text-base font-black text-white shadow-xl shadow-primary/20 active:scale-95 transition-all"
+                className="h-12 w-full rounded-full bg-primary text-sm font-black text-white shadow-xl shadow-primary/20 transition-all active:scale-95 sm:h-14 sm:text-base"
               >
                 Lihat {results.length} Villa
               </button>
@@ -333,31 +359,31 @@ function VillasList() {
 
       {sortOpen && (
         <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSortOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSortOpen(false)}
+          />
           <div
             role="dialog"
             aria-modal="true"
-            className="relative mt-auto w-full rounded-t-[2.5rem] bg-background p-6 shadow-2xl"
+            className="relative mt-auto w-full rounded-t-[2rem] bg-background p-4 shadow-2xl sm:p-6"
           >
             <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-muted" />
             <h2 className="mb-6 text-xl font-black tracking-tight text-foreground px-2">Urutkan</h2>
             <div className="flex flex-col gap-2">
-              {[
-                { v: "recommended", l: "Rekomendasi" },
-                { v: "price-asc", l: "Harga Termurah" },
-                { v: "price-desc", l: "Harga Termahal" },
-                { v: "rating", l: "Rating Tertinggi" },
-              ].map((opt) => {
+              {SORT_OPTIONS.map((opt) => {
                 const active = search.sort === opt.v;
                 return (
                   <button
                     key={opt.v}
                     onClick={() => {
-                      handleFilterChange({ sort: opt.v as any });
+                      handleFilterChange({ sort: opt.v });
                       setSortOpen(false);
                     }}
-                    className={`flex items-center justify-between px-5 py-4 rounded-2xl text-sm font-bold transition-all ${
-                      active ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-secondary/50 text-foreground hover:bg-secondary"
+                    className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-bold transition-all ${
+                      active
+                        ? "bg-primary text-white shadow-lg shadow-primary/20"
+                        : "bg-secondary/50 text-foreground hover:bg-secondary"
                     }`}
                   >
                     {opt.l}
@@ -370,7 +396,6 @@ function VillasList() {
           </div>
         </div>
       )}
-
 
       <a
         href="https://wa.me/6281336664592?text=Halo%20Apamurahbanget%2C%20saya%20mau%20tanya%20villa%20di%20Batu."

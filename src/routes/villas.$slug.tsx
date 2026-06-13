@@ -13,7 +13,7 @@ import {
   Phone,
   Palmtree,
   LayoutGrid,
-  ExternalLink,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { getVilla, VILLAS, formatIDR } from "@/data/villas";
@@ -34,6 +34,7 @@ export const Route = createFileRoute("/villas/$slug")({
     const v = loaderData?.villa;
     if (!v) return {};
     return {
+      links: [{ rel: "preload", as: "image", href: v.cover, type: "image/webp" }],
       meta: [
         { title: `${v.name} — Sewa Villa di ${v.area}` },
         {
@@ -107,16 +108,21 @@ function VillaDetail() {
                 to="/villas"
                 className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary"
               >
-                <ArrowLeft className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Kembali</span>
+                <ArrowLeft className="h-3.5 w-3.5" />{" "}
+                <span className="hidden sm:inline">Kembali</span>
               </Link>
-              <WhatsAppButton size="sm" label="Pesan WA" message={waMessage} className="rounded-full" />
+              <WhatsAppButton
+                size="sm"
+                label="Pesan WA"
+                message={waMessage}
+                className="rounded-full"
+              />
             </div>
           </div>
         </header>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 pt-28 pb-12 sm:px-6">
-        
         {/* Header Title Section */}
         <section className="mb-8 animate-fade-up">
           <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -134,7 +140,9 @@ function VillaDetail() {
           </h1>
           <div className="mt-4 flex items-center gap-1.5 text-muted-foreground">
             <MapPin className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold uppercase tracking-widest">{villa.area}, Batu</span>
+            <span className="text-sm font-semibold uppercase tracking-widest">
+              {villa.area}, Batu
+            </span>
           </div>
         </section>
 
@@ -142,19 +150,19 @@ function VillaDetail() {
         <section aria-label="Galeri foto" className="mb-12 animate-fade-in delay-200">
           <div className="group relative p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 overflow-hidden">
             <div className="relative overflow-hidden rounded-[calc(2.5rem-0.375rem)] shadow-2xl">
-              
               {/* Desktop: 5-grid mosaic */}
               <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[560px]">
                 <button
-                  className="col-span-2 row-span-2 overflow-hidden relative group/hero"
+                  className="col-span-2 row-span-2 overflow-hidden relative group/hero rounded-[1.6rem] bg-muted text-left"
                   onClick={() => openLightbox(0)}
                 >
                   <LazyImage
-                    eager
                     src={villa.images[0]}
                     alt={villa.name}
                     className="h-full w-full object-cover transition-transform duration-1000 group-hover/hero:scale-[1.05]"
+                    wrapperClassName="h-full w-full"
                     aspectRatio="1/1"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-black/10 group-hover/hero:bg-transparent transition-colors duration-500" />
                 </button>
@@ -164,19 +172,23 @@ function VillaDetail() {
                     <button
                       key={src}
                       onClick={() => openLightbox(i + 1)}
-                      className="relative overflow-hidden group/thumb"
+                      className="relative overflow-hidden group/thumb rounded-[1.2rem] bg-muted text-left"
                     >
                       <LazyImage
                         src={src}
                         alt={`${villa.name} ${i + 2}`}
                         className="h-full w-full object-cover transition-transform duration-700 group-hover/thumb:scale-[1.08]"
+                        wrapperClassName="h-full w-full"
                         aspectRatio="4/3"
+                        sizes="25vw"
                       />
                       <div className="absolute inset-0 bg-black/10 group-hover/thumb:bg-transparent transition-colors duration-500" />
                       {isLast && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white backdrop-blur-[2px]">
                           <p className="text-3xl font-black">+{villa.images.length - 5}</p>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Foto Lagi</p>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">
+                            Foto Lagi
+                          </p>
                         </div>
                       )}
                     </button>
@@ -186,16 +198,17 @@ function VillaDetail() {
 
               {/* Mobile: Scrollable Slider or Stack */}
               <div className="md:hidden flex flex-col gap-2">
-                 <button
-                  className="w-full h-64 overflow-hidden relative"
+                <button
+                  className="w-full h-64 overflow-hidden relative rounded-[1.6rem] bg-muted text-left"
                   onClick={() => openLightbox(0)}
                 >
                   <LazyImage
-                    eager
                     src={villa.images[0]}
                     alt={villa.name}
                     className="h-full w-full object-cover"
+                    wrapperClassName="h-full w-full"
                     aspectRatio="16/9"
+                    sizes="100vw"
                   />
                 </button>
                 <div className="grid grid-cols-2 gap-2 px-0">
@@ -203,13 +216,15 @@ function VillaDetail() {
                     <button
                       key={src}
                       onClick={() => openLightbox(i + 1)}
-                      className="relative h-32 overflow-hidden"
+                      className="relative h-32 overflow-hidden rounded-[1.1rem] bg-muted text-left"
                     >
                       <LazyImage
                         src={src}
                         alt={`${villa.name} ${i + 2}`}
                         className="h-full w-full object-cover"
+                        wrapperClassName="h-full w-full"
                         aspectRatio="4/3"
+                        sizes="50vw"
                       />
                     </button>
                   ))}
@@ -230,7 +245,6 @@ function VillaDetail() {
 
         {/* ── CONTENT GRID ── */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_380px]">
-
           {/* Left Column: Details */}
           <section className="animate-fade-up delay-300">
             {/* Specs Hub */}
@@ -243,7 +257,10 @@ function VillaDetail() {
             <div className="space-y-12">
               <div className="prose prose-sm sm:prose-base dark:prose-invert">
                 <h2 className="font-serif text-3xl tracking-tight mb-4">Tentang Villa</h2>
-                <p className="text-muted-foreground leading-relaxed text-lg" style={{ textWrap: "pretty" }}>
+                <p
+                  className="text-muted-foreground leading-relaxed text-lg"
+                  style={{ textWrap: "pretty" }}
+                >
                   {villa.description}
                 </p>
               </div>
@@ -273,7 +290,10 @@ function VillaDetail() {
                     { icon: ShieldCheck, label: "DP 50% untuk konfirmasi booking" },
                     { icon: Users, label: "Tamu sesuai kapasitas yang tertera" },
                   ].map((rule) => (
-                    <div key={rule.label} className="flex items-center gap-4 p-5 rounded-2xl bg-secondary/30 border border-border/40">
+                    <div
+                      key={rule.label}
+                      className="flex items-center gap-4 p-5 rounded-2xl bg-secondary/30 border border-border/40"
+                    >
                       <rule.icon className="h-6 w-6 text-primary" />
                       <span className="text-sm font-bold text-foreground">{rule.label}</span>
                     </div>
@@ -288,9 +308,14 @@ function VillaDetail() {
             <div className="sticky top-28 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 animate-fade-up delay-500">
               <div className="bg-card rounded-[calc(2.5rem-0.375rem)] p-6 sm:p-8 shadow-2xl border border-border/60">
                 <PricingBlock villa={villa} />
-                
+
                 <div className="mt-8 space-y-3">
-                  <WhatsAppButton size="lg" label="Pesan Lewat WhatsApp" message={waMessage} className="w-full h-14 text-base font-black rounded-full shadow-xl shadow-primary/20" />
+                  <WhatsAppButton
+                    size="lg"
+                    label="Pesan Lewat WhatsApp"
+                    message={waMessage}
+                    className="w-full h-14 text-base font-black rounded-full shadow-xl shadow-primary/20"
+                  />
                   <a
                     href={`tel:+${WA_NUMBER}`}
                     className="flex h-14 w-full items-center justify-center gap-3 rounded-full border border-border bg-background px-4 text-sm font-bold text-foreground hover:bg-secondary transition-all active:scale-95"
@@ -322,9 +347,14 @@ function VillaDetail() {
                 <h2 className="font-serif text-4xl tracking-tight text-foreground">
                   Rekomendasi Lainnya
                 </h2>
-                <p className="mt-2 text-muted-foreground font-medium">Pilihan serupa yang mungkin kamu suka</p>
+                <p className="mt-2 text-muted-foreground font-medium">
+                  Pilihan serupa yang mungkin kamu suka
+                </p>
               </div>
-              <Link to="/villas" className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
+              <Link
+                to="/villas"
+                className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+              >
                 Lihat Semua <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -342,14 +372,16 @@ function VillaDetail() {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function Spec({ icon: Icon, label, sub }: { icon: any; label: string; sub: string }) {
+function Spec({ icon: Icon, label, sub }: { icon: LucideIcon; label: string; sub: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-6 px-4 rounded-[2rem] bg-card border border-border/60 shadow-sm">
       <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/5 text-primary mb-3">
         <Icon className="h-6 w-6" />
       </div>
       <span className="text-sm font-black text-foreground leading-none">{label}</span>
-      <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{sub}</span>
+      <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        {sub}
+      </span>
     </div>
   );
 }
@@ -363,7 +395,9 @@ function PricingBlock({ villa }: { villa: Villa }) {
         </span>
         <div className="mt-3 flex items-center justify-between p-4 rounded-2xl bg-primary/5 border border-primary/10">
           <div>
-            <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Weekday</p>
+            <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">
+              Weekday
+            </p>
             <p className="text-2xl font-black text-foreground tabular-nums leading-none">
               {formatIDR(villa.price)}
             </p>
@@ -373,10 +407,12 @@ function PricingBlock({ villa }: { villa: Villa }) {
           </span>
         </div>
       </div>
-      
+
       <div className="flex items-center justify-between p-4 rounded-2xl bg-accent/5 border border-accent/10">
         <div>
-          <p className="text-[10px] font-bold text-accent/60 uppercase tracking-widest mb-1">Weekend</p>
+          <p className="text-[10px] font-bold text-accent/60 uppercase tracking-widest mb-1">
+            Weekend
+          </p>
           <p className="text-2xl font-black text-foreground tabular-nums leading-none">
             {formatIDR(villa.priceWeekend)}
           </p>

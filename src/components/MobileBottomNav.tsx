@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Search, Heart } from "lucide-react";
+import { Heart, Home, Search } from "lucide-react";
 
 type Item = {
   key: string;
@@ -33,11 +33,11 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Navigasi utama"
-      className="fixed inset-x-0 bottom-0 z-40 lg:hidden pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 z-40 lg:hidden pb-[max(env(safe-area-inset-bottom),0.5rem)]"
     >
-      <div className="mx-auto max-w-lg px-4 pb-4">
-        <div className="bg-black/80 dark:bg-white/80 backdrop-blur-2xl rounded-[2rem] border border-white/10 dark:border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden">
-          <ul className="grid grid-cols-3 h-16">
+      <div className="mx-auto max-w-[26rem] px-4">
+        <div className="overflow-hidden rounded-[1.45rem] border border-border/70 bg-card/92 shadow-[0_12px_34px_-18px_rgb(20_50_90/0.45)] backdrop-blur-2xl dark:border-white/10 dark:bg-black/82">
+          <ul className="grid h-14 grid-cols-3">
             {items.map((it) => {
               const active = it.match(path);
               const Icon = it.icon;
@@ -47,31 +47,37 @@ export function MobileBottomNav() {
                   <Link
                     to={it.to}
                     aria-current={active ? "page" : undefined}
-                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-all duration-300"
+                    className="flex h-full w-full flex-col items-center justify-center gap-0.5 transition-all duration-300"
                   >
                     <div className="relative group">
-                      <div className={`absolute -inset-3 rounded-full transition-all duration-500 ${active ? "bg-primary/20 scale-100 opacity-100 blur-md" : "scale-0 opacity-0"}`} />
+                      <div
+                        className={`absolute -inset-2 rounded-full transition-all duration-500 ${
+                          active
+                            ? "scale-100 bg-primary/12 opacity-100 blur-md"
+                            : "scale-0 opacity-0"
+                        }`}
+                      />
                       <Icon
                         className={
-                          "relative z-10 transition-all duration-500 " +
+                          "relative z-10 h-[1.15rem] w-[1.15rem] transition-all duration-500 " +
                           (active
-                            ? "h-5 w-5 stroke-[2.5] text-white dark:text-black " +
+                            ? "stroke-[2.35] text-primary " +
                               (it.key === "fav" ? "fill-red-500 stroke-red-500" : "")
-                            : "h-5 w-5 stroke-[2] text-white/50 dark:text-black/50 group-hover:text-white/80")
+                            : "stroke-[2] text-muted-foreground group-hover:text-foreground")
                         }
                       />
                     </div>
                     <span
                       className={
-                        "text-[9px] font-black uppercase tracking-[0.1em] transition-all duration-500 " +
-                        (active ? "text-white dark:text-black" : "text-white/40 dark:text-black/40")
+                        "text-[10px] font-bold tracking-tight transition-all duration-500 " +
+                        (active ? "text-primary" : "text-muted-foreground")
                       }
                     >
                       {it.label}
                     </span>
                   </Link>
                   {active && (
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-b-full shadow-[0_0_15px_rgba(var(--primary),0.5)] animate-fade-in" />
+                    <div className="absolute left-1/2 top-0 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-primary animate-fade-in" />
                   )}
                 </li>
               );

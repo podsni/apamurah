@@ -74,16 +74,16 @@
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.90 0.018 220);
-  --input: oklch(0.90 0.018 220);
+  --border: oklch(0.9 0.018 220);
+  --input: oklch(0.9 0.018 220);
   --ring: oklch(0.48 0.14 230);
-  --surface: oklch(0.962 0.020 218);
+  --surface: oklch(0.962 0.02 218);
   --shadow-soft: 0 1px 3px rgb(20 50 90 / 0.05), 0 4px 16px rgb(20 50 90 / 0.07);
-  --shadow-card: 0 2px 6px rgb(20 50 90 / 0.05), 0 16px 40px -12px rgb(20 50 90 / 0.10);
+  --shadow-card: 0 2px 6px rgb(20 50 90 / 0.05), 0 16px 40px -12px rgb(20 50 90 / 0.1);
   --shadow-sky: 0 8px 32px -8px rgb(30 80 160 / 0.15);
   --chart-1: oklch(0.48 0.14 230);
   --chart-2: oklch(0.72 0.12 55);
-  --chart-3: oklch(0.60 0.10 180);
+  --chart-3: oklch(0.6 0.1 180);
   --chart-4: oklch(0.65 0.12 260);
   --chart-5: oklch(0.55 0.14 200);
   --sidebar: oklch(0.982 0.008 220);
@@ -92,21 +92,21 @@
   --sidebar-primary-foreground: oklch(0.99 0.002 220);
   --sidebar-accent: oklch(0.945 0.018 220);
   --sidebar-accent-foreground: oklch(0.25 0.03 230);
-  --sidebar-border: oklch(0.90 0.018 220);
+  --sidebar-border: oklch(0.9 0.018 220);
   --sidebar-ring: oklch(0.48 0.14 230);
 }
 
 .dark {
   --background: oklch(0.14 0.025 230);
-  --foreground: oklch(0.93 0.010 220);
+  --foreground: oklch(0.93 0.01 220);
   --card: oklch(0.19 0.025 230);
-  --card-foreground: oklch(0.93 0.010 220);
+  --card-foreground: oklch(0.93 0.01 220);
   --popover: oklch(0.19 0.025 230);
-  --popover-foreground: oklch(0.93 0.010 220);
+  --popover-foreground: oklch(0.93 0.01 220);
   --primary: oklch(0.68 0.14 225);
   --primary-foreground: oklch(0.14 0.025 230);
   --secondary: oklch(0.24 0.025 230);
-  --secondary-foreground: oklch(0.93 0.010 220);
+  --secondary-foreground: oklch(0.93 0.01 220);
   --muted: oklch(0.24 0.025 230);
   --muted-foreground: oklch(0.62 0.02 225);
   --accent: oklch(0.72 0.12 55);
@@ -118,15 +118,15 @@
   --ring: oklch(0.68 0.14 225);
   --chart-1: oklch(0.68 0.14 225);
   --chart-2: oklch(0.72 0.12 55);
-  --chart-3: oklch(0.60 0.10 180);
+  --chart-3: oklch(0.6 0.1 180);
   --chart-4: oklch(0.65 0.12 260);
   --chart-5: oklch(0.55 0.14 200);
   --sidebar: oklch(0.19 0.025 230);
-  --sidebar-foreground: oklch(0.93 0.010 220);
+  --sidebar-foreground: oklch(0.93 0.01 220);
   --sidebar-primary: oklch(0.68 0.14 225);
   --sidebar-primary-foreground: oklch(0.14 0.025 230);
   --sidebar-accent: oklch(0.24 0.025 230);
-  --sidebar-accent-foreground: oklch(0.93 0.010 220);
+  --sidebar-accent-foreground: oklch(0.93 0.01 220);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.68 0.14 225);
 }
@@ -138,10 +138,14 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    overflow-x: hidden;
     font-feature-settings: "ss01", "ss02";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+  html {
+    overflow-x: hidden;
   }
   :focus-visible {
     outline: 2px solid var(--color-ring);
@@ -149,11 +153,15 @@
     border-radius: 4px;
   }
   /* Make every interactive element more obviously tappable on touch */
-  button, a, [role="button"] {
+  button,
+  a,
+  [role="button"] {
     -webkit-tap-highlight-color: transparent;
   }
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
@@ -172,39 +180,84 @@
   .animate-slide-in {
     animation: slide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+  .animate-shimmer {
+    animation: shimmer 1.4s linear infinite;
+    background-size: 200% 100%;
+  }
   .animate-marquee {
     animation: marquee 28s linear infinite;
   }
   @keyframes fade-up {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes slide-in {
-    from { opacity: 0; transform: translateX(-12px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
   @keyframes shimmer {
-    0%   { background-position: -200% 0; }
-    100% { background-position:  200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
   @keyframes pulse-soft {
-    0%, 100% { opacity: 0.6; }
-    50%      { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
   }
-  .animate-pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
+  .animate-pulse-soft {
+    animation: pulse-soft 2.4s ease-in-out infinite;
+  }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
 
   /* Hide scrollbar while keeping scroll functionality */
   .scrollbar-none {
@@ -216,17 +269,31 @@
   }
 
   /* Text balance helpers */
-  .text-wrap-balance { text-wrap: balance; }
-  .text-wrap-pretty  { text-wrap: pretty; }
+  .text-wrap-balance {
+    text-wrap: balance;
+  }
+  .text-wrap-pretty {
+    text-wrap: pretty;
+  }
 
   /* Aspect ratio helper for gallery thumbnails */
-  .aspect-square { aspect-ratio: 1 / 1; }
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
 
   /* iOS notch / safe area helpers */
-  .pt-safe    { padding-top:    env(safe-area-inset-top); }
-  .pb-safe    { padding-bottom: env(safe-area-inset-bottom); }
-  .mt-safe    { margin-top:     env(safe-area-inset-top); }
-  .mb-safe    { margin-bottom:  env(safe-area-inset-bottom); }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mt-safe {
+    margin-top: env(safe-area-inset-top);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom);
+  }
 
   /* Glassy surfaces used on sticky bars */
   .surface-glass {
@@ -237,21 +304,34 @@
 
   /* Subtle dotted/dashed background */
   .bg-dots {
-    background-image: radial-gradient(circle at 1px 1px, color-mix(in oklch, var(--color-foreground) 12%, transparent) 1px, transparent 0);
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklch, var(--color-foreground) 12%, transparent) 1px,
+      transparent 0
+    );
     background-size: 22px 22px;
   }
 
   /* Subtle press feedback used by all primary actions */
   .press {
-    transition: transform .15s ease, box-shadow .25s ease, background-color .2s ease;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.25s ease,
+      background-color 0.2s ease;
   }
-  .press:active { transform: translateY(1px) scale(.985); }
+  .press:active {
+    transform: translateY(1px) scale(0.985);
+  }
 
   /* Card hover lift (used on list/card surfaces) */
   .lift {
-    transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease;
   }
-  .lift:hover { transform: translateY(-3px); }
+  .lift:hover {
+    transform: translateY(-3px);
+  }
 }
 
 /* Smooth scroll globally */

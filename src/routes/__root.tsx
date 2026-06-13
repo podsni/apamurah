@@ -148,7 +148,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-dvh pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
+      <div className="min-h-dvh pb-[calc(5.25rem+env(safe-area-inset-bottom))] lg:pb-0">
         <Outlet />
       </div>
       <ScrollToTop />

@@ -1,10 +1,11 @@
 /**
- * LazyImage — Performance-optimized image with:
- * - IntersectionObserver lazy loading (200px rootMargin pre-load)
- * - Blur-up shimmer placeholder (zero CLS via aspect-ratio container)
- * - Smooth opacity fade-in on load
- * - GPU-only transitions (opacity only, no layout triggers)
- * - decoding="async" to prevent main thread blocking
+ * LazyImage — performance-optimized image primitive.
+ *
+ * Goals:
+ * - Avoid CLS with aspect-ratio or parent-fill mode.
+ * - Load only when near viewport unless marked eager/priority.
+ * - Expose fetchPriority + sizes so hero/first-card images win bandwidth.
+ * - Show a skeleton that matches the final image box, not a spinner.
  */
 import { useEffect, useRef, useState } from "react";
 
@@ -12,10 +13,14 @@ interface LazyImageProps {
   src: string;
   alt: string;
   className?: string;
-  /** Aspect ratio for the container, e.g. "4/3" or "1/1". Prevents CLS. */
+  wrapperClassName?: string;
+  /** Aspect ratio for the container, e.g. "4/3" or "16/9". Prevents CLS. */
   aspectRatio?: string;
-  /** If true, loads immediately (for above-the-fold images) */
+  /** If true, loads immediately. Use only for LCP / first visible image. */
   eager?: boolean;
+  /** Stronger hint than eager: marks image as high-priority for the browser. */
+  priority?: boolean;
+  sizes?: string;
   onClick?: () => void;
 }
 
@@ -23,17 +28,21 @@ export function LazyImage({
   src,
   alt,
   className = "",
+  wrapperClassName = "",
   aspectRatio,
   eager = false,
+  priority = false,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   onClick,
 }: LazyImageProps) {
-  const [isInView, setIsInView] = useState(eager);
+  const shouldLoadImmediately = eager || priority;
+  const [isInView, setIsInView] = useState(shouldLoadImmediately);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (eager) return;
+    if (shouldLoadImmediately) return;
     const el = ref.current;
     if (!el) return;
 
@@ -44,40 +53,34 @@ export function LazyImage({
           observer.disconnect();
         }
       },
-      { rootMargin: "300px 0px" } // pre-load 300px before entering viewport
+      { rootMargin: "420px 0px" },
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [eager]);
+  }, [shouldLoadImmediately]);
 
   const containerStyle = aspectRatio
     ? { aspectRatio, position: "relative" as const, overflow: "hidden" as const }
     : { position: "relative" as const, overflow: "hidden" as const };
 
   return (
-    <div ref={ref} style={containerStyle} onClick={onClick} className="group">
-      {/* Shimmer skeleton — always visible until image loads or errors */}
+    <div
+      ref={ref}
+      style={containerStyle}
+      onClick={onClick}
+      className={`relative overflow-hidden bg-muted ${wrapperClassName}`}
+    >
       {!isLoaded && !isError && (
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-muted via-secondary to-muted"
-          style={{
-            backgroundSize: "200% 100%",
-            animation: "shimmer 1.5s infinite linear",
-            zIndex: 1,
-          }}
-        />
+        <div className="absolute inset-0 z-[1] overflow-hidden bg-muted">
+          <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_0%,hsl(var(--secondary))_38%,transparent_72%)] animate-shimmer" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/5" />
+        </div>
       )}
 
-      {/* Error state */}
       {isError && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-secondary/50 text-muted-foreground">
-          <svg
-            className="h-8 w-8 opacity-20"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-secondary/70 px-4 text-center text-muted-foreground">
+          <svg className="h-8 w-8 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -85,25 +88,26 @@ export function LazyImage({
               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <span className="mt-2 text-[10px] font-medium uppercase tracking-wider opacity-40">
-            Image failed to load
+          <span className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] opacity-60">
+            Foto belum bisa dimuat
           </span>
         </div>
       )}
 
-      {/* Actual image — only renders src when in viewport */}
       {isInView && (
         <img
           src={src}
           alt={alt}
           decoding="async"
-          loading={eager ? "eager" : "lazy"}
+          loading={shouldLoadImmediately ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          sizes={sizes}
           onLoad={() => setIsLoaded(true)}
           onError={() => setIsError(true)}
           className={className}
           style={{
             opacity: isLoaded ? 1 : 0,
-            transition: "opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "opacity 420ms cubic-bezier(0.22, 1, 0.36, 1)",
             willChange: isLoaded ? "auto" : "opacity",
           }}
         />

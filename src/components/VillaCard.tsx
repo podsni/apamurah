@@ -1,19 +1,47 @@
 import { Link } from "@tanstack/react-router";
-import { Star, BedDouble, Bath, Users, Heart, ChevronLeft, ChevronRight, ExternalLink, MapPin } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Star,
+  BedDouble,
+  Bath,
+  Users,
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Villa } from "@/data/villas";
 import { formatIDR } from "@/data/villas";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { useFavorites } from "@/hooks/use-favorites";
 import { LazyImage } from "@/components/LazyImage";
 
-export function VillaCard({ villa }: { villa: Villa }) {
+export function VillaCard({ villa, priority = false }: { villa: Villa; priority?: boolean }) {
   const { isFavorite, toggle } = useFavorites();
   const fav = isFavorite(villa.slug);
   const [imgIdx, setImgIdx] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [cardInView, setCardInView] = useState(priority);
+  const cardRef = useRef<HTMLElement>(null);
 
   const total = villa.images.length;
+
+  useEffect(() => {
+    if (priority) return;
+    const el = cardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCardInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "360px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [priority]);
 
   const prevImg = useCallback(
     (e?: React.SyntheticEvent) => {
@@ -21,7 +49,7 @@ export function VillaCard({ villa }: { villa: Villa }) {
       e?.stopPropagation();
       setImgIdx((i) => (i - 1 + total) % total);
     },
-    [total]
+    [total],
   );
   const nextImg = useCallback(
     (e?: React.SyntheticEvent) => {
@@ -29,15 +57,16 @@ export function VillaCard({ villa }: { villa: Villa }) {
       e?.stopPropagation();
       setImgIdx((i) => (i + 1) % total);
     },
-    [total]
+    [total],
   );
 
-  // Auto-rotate gallery every 6s (paused on hover)
+  // Auto-rotate gallery every 6s (paused on hover). Respect reduced-motion users.
   useEffect(() => {
-    if (total <= 1 || isHovered) return;
+    if (total <= 1 || isHovered || !cardInView) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = window.setInterval(() => setImgIdx((i) => (i + 1) % total), 6000);
     return () => window.clearInterval(id);
-  }, [total, isHovered]);
+  }, [total, isHovered, cardInView]);
 
   // Touch swipe support
   const startX = useRef<number | null>(null);
@@ -54,29 +83,42 @@ export function VillaCard({ villa }: { villa: Villa }) {
       }
       startX.current = null;
     },
-    [nextImg, prevImg]
+    [nextImg, prevImg],
   );
 
-  // Performance: Only render active, next, and previous images
-  const visibleIndices = useMemo(() => {
-    if (total <= 1) return [0];
-    const prev = (imgIdx - 1 + total) % total;
-    const next = (imgIdx + 1) % total;
-    return Array.from(new Set([imgIdx, prev, next])).sort((a, b) => a - b);
-  }, [imgIdx, total]);
+  // Performance: render only the visible image. Preload the next image during idle time
+  // so AB Villa's first card no longer downloads image_33 just because it is "previous".
+  useEffect(() => {
+    if (total <= 1 || typeof window === "undefined" || !cardInView || !isHovered) return;
+    const next = villa.images[(imgIdx + 1) % total];
+    const load = () => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = next;
+    };
+    const win = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (win.requestIdleCallback) {
+      const id = win.requestIdleCallback(load, { timeout: 1200 });
+      return () => win.cancelIdleCallback?.(id);
+    }
+    const id = window.setTimeout(load, 700);
+    return () => window.clearTimeout(id);
+  }, [imgIdx, total, villa.images, cardInView, isHovered]);
 
   return (
     <article
+      ref={cardRef}
       className="group relative flex flex-col transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Outer Shell (Double Bezel) */}
       <div className="relative p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 overflow-hidden">
-        
         {/* Inner Core */}
         <div className="relative overflow-hidden rounded-[calc(2rem-0.375rem)] bg-card shadow-[0_4px_20px_-4px_rgba(20,50,90,0.1)]">
-          
           {/* Image carousel container */}
           <div
             className="relative overflow-hidden bg-muted cursor-pointer"
@@ -84,40 +126,25 @@ export function VillaCard({ villa }: { villa: Villa }) {
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            {/* Optimized image stack */}
-            {villa.images.map((src, i) => {
-              const isVisible = visibleIndices.includes(i);
-              if (!isVisible) return null;
-
-              return (
-                <div
-                  key={src + i}
-                  className="absolute inset-0 transition-opacity duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                  style={{ 
-                    opacity: i === imgIdx ? 1 : 0, 
-                    pointerEvents: i === imgIdx ? "auto" : "none",
-                    zIndex: i === imgIdx ? 1 : 0 
-                  }}
-                  aria-hidden={i !== imgIdx}
-                >
-                  <Link
-                    to="/villas/$slug"
-                    params={{ slug: villa.slug }}
-                    className="block h-full outline-none"
-                    tabIndex={i === imgIdx ? 0 : -1}
-                  >
-                    <LazyImage
-                      src={src}
-                      alt={`${villa.name} — foto ${i + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.05]"
-                      aspectRatio="4/3"
-                      eager={i === 0} // only first image is eager
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
-                  </Link>
-                </div>
-              );
-            })}
+            {/* Optimized active image only */}
+            <Link
+              key={`${villa.slug}-${imgIdx}`}
+              to="/villas/$slug"
+              params={{ slug: villa.slug }}
+              className="absolute inset-0 z-[1] block outline-none"
+            >
+              <LazyImage
+                src={villa.images[imgIdx] ?? villa.cover}
+                alt={`${villa.name} — foto ${imgIdx + 1}`}
+                className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.045]"
+                wrapperClassName="h-full w-full"
+                aspectRatio="4/3"
+                eager={priority && imgIdx === 0}
+                priority={priority && imgIdx === 0}
+                sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 420px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent opacity-70" />
+            </Link>
 
             {/* Top Badges */}
             <div className="absolute top-3 inset-x-3 z-10 flex items-center justify-between">
@@ -151,18 +178,28 @@ export function VillaCard({ villa }: { villa: Villa }) {
             {/* Carousel Controls */}
             {total > 1 && (
               <>
-                <div className="absolute inset-y-0 left-0 z-10 w-1/4" onClick={prevImg} />
-                <div className="absolute inset-y-0 right-0 z-10 w-1/4" onClick={nextImg} />
-                
+                <button
+                  className="absolute inset-y-0 left-0 z-10 w-1/4 cursor-w-resize"
+                  onClick={prevImg}
+                  aria-label="Foto sebelumnya"
+                />
+                <button
+                  className="absolute inset-y-0 right-0 z-10 w-1/4 cursor-e-resize"
+                  onClick={nextImg}
+                  aria-label="Foto berikutnya"
+                />
+
                 {/* Visual indicator of controls on hover */}
                 <button
                   onClick={prevImg}
+                  aria-label="Foto sebelumnya"
                   className="absolute left-3 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/10 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-x-1"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
                   onClick={nextImg}
+                  aria-label="Foto berikutnya"
                   className="absolute right-3 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/10 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1"
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -173,6 +210,7 @@ export function VillaCard({ villa }: { villa: Villa }) {
                   {villa.images.slice(0, Math.min(total, 6)).map((_, i) => (
                     <div
                       key={i}
+                      aria-hidden="true"
                       className={`h-1 rounded-full transition-all duration-500 ${
                         i === imgIdx ? "w-4 bg-white" : "w-1 bg-white/40"
                       }`}
@@ -186,7 +224,11 @@ export function VillaCard({ villa }: { villa: Villa }) {
           {/* Card Body */}
           <div className="flex flex-col p-5 sm:p-6 bg-card">
             <div className="flex justify-between items-start gap-3">
-              <Link to="/villas/$slug" params={{ slug: villa.slug }} className="group/title block min-w-0">
+              <Link
+                to="/villas/$slug"
+                params={{ slug: villa.slug }}
+                className="group/title block min-w-0"
+              >
                 <h3 className="text-lg font-bold tracking-tight text-foreground transition-colors duration-300 group-hover/title:text-primary truncate">
                   {villa.name}
                 </h3>
