@@ -1,25 +1,20 @@
-import villa1 from "@/assets/villa-1.jpg";
-import villa2 from "@/assets/villa-2.jpg";
-import villa3 from "@/assets/villa-3.jpg";
-import heroVilla from "@/assets/hero-villa-batu.jpg";
-
-export const AREAS = ["Songgoriti", "Batu Kota", "Bumiaji", "Pujon", "Coban Rondo"] as const;
+export const AREAS = ["Batu", "Malang"] as const;
 export type Area = (typeof AREAS)[number];
 
 export const CATEGORIES = ["Family", "Group", "Romantic", "Budget", "Premium"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export const AMENITIES = [
-  "Kolam Pribadi",
-  "BBQ",
+  "Kolam Renang",
   "Karaoke",
+  "Billiard",
   "Wi-Fi",
-  "Mountain View",
-  "Pemanas Air",
-  "Perapian",
-  "Taman",
-  "Parkir Luas",
-  "Sunset Deck",
+  "Rooftop",
+  "PS3",
+  "Dapur Lengkap",
+  "BBQ",
+  "Extra Bed",
+  "AC",
 ] as const;
 export type Amenity = (typeof AMENITIES)[number];
 
@@ -28,7 +23,10 @@ export type Villa = {
   name: string;
   area: Area;
   category: Category[];
+  /** harga weekday dalam rupiah */
   price: number;
+  /** harga weekend dalam rupiah */
+  priceWeekend: number;
   bedrooms: number;
   bathrooms: number;
   guests: number;
@@ -39,181 +37,97 @@ export type Villa = {
   images: string[];
   description: string;
   amenities: Amenity[];
+  gdriveLink?: string;
   featured?: boolean;
 };
 
 export const VILLAS: Villa[] = [
   {
-    slug: "villa-asana-pinus",
-    name: "Villa Asana Pinus",
-    area: "Songgoriti",
-    category: ["Family", "Group"],
-    price: 1850000,
-    bedrooms: 3,
-    bathrooms: 3,
-    guests: 6,
+    slug: "ab-villa",
+    name: "AB Villa",
+    area: "Batu",
+    category: ["Group", "Family", "Premium"],
+    price: 2_500_000,
+    priceWeekend: 3_500_000,
+    bedrooms: 4,
+    bathrooms: 5,
+    guests: 30,
     rating: 4.9,
-    reviews: 184,
+    reviews: 142,
     tag: "Populer",
-    cover: villa1,
-    images: [villa1, heroVilla, villa2, villa3],
+    cover: "/images/ab_villa/image_1.webp",
+    images: Array.from({ length: 33 }, (_, i) => `/images/ab_villa/image_${i + 1}.webp`),
     description:
-      "Villa modern di antara pohon pinus Songgoriti dengan kolam pribadi berair hangat, ruang BBQ outdoor, dan ruang karaoke. Cocok untuk keluarga 6 orang yang ingin liburan tenang dekat dengan pusat wisata Batu.",
-    amenities: ["Kolam Pribadi", "BBQ", "Karaoke", "Wi-Fi", "Pemanas Air", "Parkir Luas"],
+      "Villa megah dengan kapasitas hingga 30 orang, dilengkapi 4 kamar tidur, 5 kamar mandi, kolam renang, karaoke, dan meja billiard. Sangat cocok untuk gathering keluarga besar atau rombongan.",
+    amenities: ["Kolam Renang", "Karaoke", "Billiard", "Wi-Fi", "Extra Bed"],
+    gdriveLink:
+      "https://drive.google.com/drive/folders/1-UVagXMRHV0fOxQnHOSGmGjkBozvgM4U?hl=ID",
     featured: true,
   },
   {
-    slug: "villa-bukit-pandang",
-    name: "Villa Bukit Pandang",
-    area: "Bumiaji",
-    category: ["Premium", "Family"],
-    price: 2450000,
+    slug: "sea-villa-2",
+    name: "Sea Villa 2",
+    area: "Batu",
+    category: ["Family", "Group"],
+    price: 1_250_000,
+    priceWeekend: 2_000_000,
     bedrooms: 4,
-    bathrooms: 4,
-    guests: 8,
+    bathrooms: 3,
+    guests: 20,
     rating: 4.8,
-    reviews: 96,
-    tag: "Baru",
-    cover: villa2,
-    images: [villa2, heroVilla, villa1, villa3],
+    reviews: 98,
+    tag: "Populer",
+    cover: "/images/sea_villa_2/image_1.webp",
+    images: Array.from({ length: 20 }, (_, i) => `/images/sea_villa_2/image_${i + 1}.webp`),
     description:
-      "Villa eksklusif di perbukitan Bumiaji dengan infinity pool menghadap pegunungan. Sunset deck luas, dapur lengkap, dan kamar utama dengan bathtub menghadap jendela panorama.",
-    amenities: [
-      "Kolam Pribadi",
-      "Mountain View",
-      "Pemanas Air",
-      "Sunset Deck",
-      "Wi-Fi",
-      "Parkir Luas",
-    ],
+      "Villa nyaman untuk 15–20 orang dengan 4 kamar tidur, kolam renang, karaoke, dan dapur lengkap. Tersedia extra bed gratis untuk 2 orang dan Wi-Fi kencang.",
+    amenities: ["Kolam Renang", "Karaoke", "Wi-Fi", "Dapur Lengkap", "Extra Bed"],
+    gdriveLink:
+      "https://drive.google.com/drive/folders/1-KGxbUQcvSyVeiDhGYx977miA5lViWtv?usp=drive_link",
     featured: true,
   },
   {
-    slug: "villa-pinewood-coban",
-    name: "Villa Pinewood Coban",
-    area: "Pujon",
-    category: ["Romantic", "Budget"],
-    price: 950000,
-    bedrooms: 2,
-    bathrooms: 2,
-    guests: 4,
-    rating: 4.7,
-    reviews: 132,
-    tag: "Hemat",
-    cover: villa3,
-    images: [villa3, villa1, villa2, heroVilla],
-    description:
-      "Cabin kayu hangat dekat air terjun Coban Rondo. Cocok untuk pasangan atau keluarga kecil, dilengkapi perapian indoor untuk malam dingin Pujon.",
-    amenities: ["Perapian", "Taman", "Wi-Fi", "Pemanas Air", "Mountain View"],
-    featured: true,
-  },
-  {
-    slug: "villa-songgoriti-grand",
-    name: "Villa Songgoriti Grand",
-    area: "Songgoriti",
-    category: ["Group", "Premium"],
-    price: 3200000,
-    bedrooms: 5,
-    bathrooms: 4,
-    guests: 12,
-    rating: 4.9,
-    reviews: 211,
-    tag: "Premium",
-    cover: heroVilla,
-    images: [heroVilla, villa2, villa1, villa3],
-    description:
-      "Villa 5 kamar untuk rombongan besar atau gathering. Kolam pribadi, ruang BBQ, ruang karaoke kedap suara, dan ruang keluarga lapang.",
-    amenities: ["Kolam Pribadi", "BBQ", "Karaoke", "Wi-Fi", "Pemanas Air", "Parkir Luas", "Taman"],
-  },
-  {
-    slug: "villa-mawar-batu-kota",
-    name: "Villa Mawar Batu Kota",
-    area: "Batu Kota",
-    category: ["Family", "Budget"],
-    price: 1150000,
+    slug: "sea-villa-1",
+    name: "Sea Villa 1",
+    area: "Batu",
+    category: ["Family", "Romantic"],
+    price: 1_000_000,
+    priceWeekend: 1_500_000,
     bedrooms: 3,
-    bathrooms: 2,
-    guests: 6,
-    rating: 4.6,
-    reviews: 78,
+    bathrooms: 3,
+    guests: 12,
+    rating: 4.8,
+    reviews: 76,
     tag: "Hemat",
-    cover: villa1,
-    images: [villa1, villa3, villa2],
+    cover: "/images/sea_villa_1/image_1.webp",
+    images: Array.from({ length: 25 }, (_, i) => `/images/sea_villa_1/image_${i + 1}.webp`),
     description:
-      "Villa minimalis di pusat Kota Batu, dekat alun-alun dan kuliner. Pilihan praktis untuk liburan singkat keluarga.",
-    amenities: ["Wi-Fi", "Pemanas Air", "Parkir Luas", "Taman"],
+      "Villa 3 kamar tidur dengan rooftop view indah, kolam renang, karaoke, PS3, dapur lengkap, dan peralatan BBQ. Pilihan tepat untuk staycation keluarga kecil hingga 12 orang.",
+    amenities: ["Kolam Renang", "Karaoke", "Rooftop", "PS3", "Dapur Lengkap", "BBQ", "Wi-Fi"],
+    gdriveLink:
+      "https://drive.google.com/drive/folders/1-UModzUaAQfZy60WocneW2n15OWr11Op?usp=drive_link",
+    featured: true,
   },
   {
-    slug: "villa-pinus-romantica",
-    name: "Villa Pinus Romantica",
-    area: "Bumiaji",
-    category: ["Romantic", "Premium"],
-    price: 1750000,
-    bedrooms: 1,
-    bathrooms: 1,
-    guests: 2,
-    rating: 5.0,
-    reviews: 54,
-    tag: "Baru",
-    cover: villa2,
-    images: [villa2, heroVilla, villa1],
-    description:
-      "Studio premium untuk pasangan dengan bathtub outdoor, perapian, dan jendela panorama menghadap hutan pinus.",
-    amenities: ["Perapian", "Mountain View", "Pemanas Air", "Wi-Fi", "Sunset Deck"],
-  },
-  {
-    slug: "villa-coban-rondo-camp",
-    name: "Villa Coban Rondo Camp",
-    area: "Coban Rondo",
-    category: ["Group", "Family"],
-    price: 1450000,
-    bedrooms: 4,
-    bathrooms: 3,
-    guests: 10,
-    rating: 4.7,
-    reviews: 102,
-    tag: "Populer",
-    cover: villa3,
-    images: [villa3, villa1, villa2],
-    description:
-      "Villa berkonsep camp dengan halaman luas untuk api unggun & BBQ, dekat wisata Coban Rondo dan Paralayang.",
-    amenities: ["BBQ", "Taman", "Wi-Fi", "Parkir Luas", "Mountain View"],
-  },
-  {
-    slug: "villa-pujon-skyhouse",
-    name: "Villa Pujon Skyhouse",
-    area: "Pujon",
-    category: ["Premium", "Romantic"],
-    price: 2150000,
-    bedrooms: 2,
-    bathrooms: 2,
-    guests: 4,
-    rating: 4.9,
-    reviews: 67,
-    tag: "Premium",
-    cover: heroVilla,
-    images: [heroVilla, villa2, villa3],
-    description:
-      "Rumah kaca di atas bukit Pujon dengan view 270°. Sunset deck, kolam kecil, dan dapur lengkap untuk staycation premium.",
-    amenities: ["Kolam Pribadi", "Mountain View", "Sunset Deck", "Pemanas Air", "Wi-Fi"],
-  },
-  {
-    slug: "villa-keluarga-batu-kota",
-    name: "Villa Keluarga Batu Kota",
-    area: "Batu Kota",
+    slug: "se-villa",
+    name: "Se Villa",
+    area: "Batu",
     category: ["Family", "Group"],
-    price: 1650000,
-    bedrooms: 4,
+    price: 1_500_000,
+    priceWeekend: 2_000_000,
+    bedrooms: 3,
     bathrooms: 3,
-    guests: 10,
+    guests: 12,
     rating: 4.7,
-    reviews: 145,
-    tag: "Populer",
-    cover: villa2,
-    images: [villa2, villa1, villa3],
+    reviews: 61,
+    tag: "Baru",
+    cover: "/images/se_villa/image_1.webp",
+    images: Array.from({ length: 22 }, (_, i) => `/images/se_villa/image_${i + 1}.webp`),
     description:
-      "Villa luas dekat BNS dan Jatim Park. Ruang keluarga lapang, dapur lengkap, dan area bermain anak.",
-    amenities: ["Kolam Pribadi", "BBQ", "Wi-Fi", "Pemanas Air", "Parkir Luas", "Taman"],
+      "Villa 3 kamar tidur ber-AC dengan 1 kamar tambahan, rooftop view, kolam renang, karaoke, dan dapur lengkap. Kapasitas hingga 12 orang dengan suasana yang nyaman dan modern.",
+    amenities: ["Kolam Renang", "Karaoke", "AC", "Rooftop", "Dapur Lengkap", "Wi-Fi"],
+    gdriveLink:
+      "https://drive.google.com/drive/folders/1x6PaWP_muGkez_J9QVTupQKLmN4IQ3wR?usp=drive_link",
   },
 ];
 
