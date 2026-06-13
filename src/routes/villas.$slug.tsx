@@ -80,7 +80,6 @@ function VillaDetail() {
 
   // Airbnb-style: show first 5 in grid, rest behind "show all" button
   const GRID_COUNT = 5;
-  const [showAll, setShowAll] = useState(false);
 
   return (
     <main className="min-h-screen bg-background text-foreground antialiased">
@@ -233,47 +232,7 @@ function VillaDetail() {
             </button>
           </div>
 
-          {/* ── FULL STRIP (show all mode) ── */}
-          {villa.images.length > GRID_COUNT && (
-            <>
-              <button
-                onClick={() => setShowAll((v) => !v)}
-                className="mt-3 w-full rounded-xl border border-dashed border-border py-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border/80 transition-colors"
-              >
-                {showAll
-                  ? "▲ Sembunyikan foto"
-                  : `▼ Tampilkan semua ${villa.images.length} foto dalam strip`}
-              </button>
 
-              {showAll && (
-                <div
-                  className="mt-2 grid gap-1.5"
-                  style={{ gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))" }}
-                >
-                  {villa.images.map((src, i) => (
-                    <button
-                      key={i}
-                      onClick={() => openLightbox(i)}
-                      className="relative overflow-hidden rounded-lg aspect-square group/t"
-                      aria-label={`Foto ${i + 1}`}
-                    >
-                      <LazyImage
-                        src={src}
-                        alt={`${villa.name} ${i + 1}`}
-                        className="h-full w-full object-cover transition-transform duration-200 group-hover/t:scale-105"
-                        aspectRatio="1/1"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover/t:bg-black/20 transition-colors duration-200 flex items-center justify-center">
-                        <span className="opacity-0 group-hover/t:opacity-100 text-white text-[10px] font-medium transition-opacity">
-                          {i + 1}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
         </section>
 
         {/* ── MAIN CONTENT ── */}
@@ -350,21 +309,7 @@ function VillaDetail() {
               </ul>
             </div>
 
-            {/* Google Drive */}
-            {villa.gdriveLink && (
-              <div className="mt-7 border-t border-border pt-7">
-                <h2 className="text-lg font-semibold text-foreground">Galeri Lengkap</h2>
-                <a
-                  href={villa.gdriveLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  <ExternalLink className="h-4 w-4 text-primary" />
-                  Lihat semua foto di Google Drive
-                </a>
-              </div>
-            )}
+
 
             {/* House rules */}
             <div className="mt-7 border-t border-border pt-7">
@@ -399,16 +344,7 @@ function VillaDetail() {
                   <Phone className="h-4 w-4" /> {WA_DISPLAY}
                 </a>
               </div>
-              {villa.gdriveLink && (
-                <a
-                  href={villa.gdriveLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 flex w-full items-center justify-center gap-1.5 text-xs font-medium text-primary hover:underline"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" /> Lihat foto di Google Drive
-                </a>
-              )}
+
               <div className="mt-5 space-y-2 border-t border-border pt-4 text-xs text-muted-foreground">
                 <p className="flex items-center gap-2">
                   <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0" />

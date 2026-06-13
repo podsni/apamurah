@@ -117,6 +117,13 @@ export function ImageLightbox({
     }
   }, [scale]);
 
+  // Close on backdrop/container click
+  const handleContainerClick = useCallback((e: React.MouseEvent) => {
+    if (e.target === e.currentTarget && scale === 1) {
+      onClose();
+    }
+  }, [scale, onClose]);
+
   // Pointer events (mouse + touch drag)
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === "touch") return; // handled by touch events
@@ -230,7 +237,7 @@ export function ImageLightbox({
       />
 
       {/* Top bar */}
-      <div className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/60 to-transparent">
+      <div className="absolute top-0 inset-x-0 z-30 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/60 to-transparent">
         <span className="text-white/80 text-sm font-medium tabular-nums">
           {idx + 1} / {images.length}
         </span>
@@ -286,6 +293,7 @@ export function ImageLightbox({
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
+        onClick={handleContainerClick}
       >
         {/* Loading skeleton */}
         {!isLoaded && (
@@ -315,14 +323,14 @@ export function ImageLightbox({
         <>
           <button
             onClick={() => navigate(-1)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-all hover:bg-black/70 hover:scale-110 active:scale-95 sm:h-12 sm:w-12"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-25 grid h-11 w-11 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-all hover:bg-black/70 hover:scale-110 active:scale-95 sm:h-12 sm:w-12"
             aria-label="Previous image"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <button
             onClick={() => navigate(1)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 grid h-11 w-11 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-all hover:bg-black/70 hover:scale-110 active:scale-95 sm:h-12 sm:w-12"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-25 grid h-11 w-11 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-all hover:bg-black/70 hover:scale-110 active:scale-95 sm:h-12 sm:w-12"
             aria-label="Next image"
           >
             <ChevronRight className="h-5 w-5" />
@@ -331,7 +339,7 @@ export function ImageLightbox({
       )}
 
       {/* Thumbnail strip */}
-      <div className="absolute bottom-0 inset-x-0 z-10 bg-gradient-to-t from-black/80 to-transparent pt-8 pb-4 px-4">
+      <div className="absolute bottom-0 inset-x-0 z-30 bg-gradient-to-t from-black/80 to-transparent pt-8 pb-4 px-4">
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none justify-center">
           {images.map((src, i) => (
             <button
@@ -344,7 +352,7 @@ export function ImageLightbox({
               }`}
               aria-label={`Go to image ${i + 1}`}
             >
-              <img src={src} alt="" className="h-full w-full object-cover" draggable={false} />
+              <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" draggable={false} />
             </button>
           ))}
         </div>
