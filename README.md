@@ -99,7 +99,9 @@ src/
 ├── routeTree.gen.ts         # AUTO-GENERATED, jangan diedit
 ├── server.ts                # SSR entry (Worker)
 ├── start.ts                 # Start config
-└── styles.css               # Tailwind + design tokens (oklch)
+├── styles.css               # Tailwind + design tokens (oklch)
+scripts/
+└── compress.cjs             # Script utilitas optimasi gambar (sharp)
 ```
 
 ---
@@ -114,6 +116,16 @@ bun run dev        # dev server (HMR) di http://localhost:5173
 bun run build      # build produksi
 bun run start      # jalankan hasil build
 ```
+
+### ⚡ Optimasi Gambar Publik
+
+Jika Anda menambahkan gambar villa baru beresolusi tinggi ke dalam folder `public/images/`, gunakan script kompresi bawaan untuk meresize dan mengompresnya agar performa website tetap optimal tanpa lag (menggunakan library `sharp`):
+
+```bash
+node scripts/compress.cjs
+```
+
+Script ini akan otomatis meresize lebar gambar ke maksimal 1200px dan mengonversi format ke WebP berkualitas 80% (mengurangi memori decode browser & menghemat bandwidth).
 
 > Project ini sebenarnya dikelola lewat [Lovable](https://lovable.dev) —
 > setiap edit di chat AI akan otomatis ter-commit ke repo.
