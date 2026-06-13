@@ -28,6 +28,7 @@ export function ImageLightbox({
   const dragStart = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
   const pinchStart = useRef<{ dist: number; scale: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lastTouchTime = useRef<number>(0);
 
   // Preload adjacent images for instant prev/next navigation
   useEffect(() => {
@@ -96,6 +97,26 @@ export function ImageLightbox({
     });
   };
 
+  // Double click to zoom
+  const handleDoubleClick = useCallback((e: React.MouseEvent<HTMLImageElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (scale > 1) {
+      setScale(1);
+      setOffset({ x: 0, y: 0 });
+    } else {
+      const targetScale = 2.5;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left - rect.width / 2;
+      const clickY = e.clientY - rect.top - rect.height / 2;
+      setScale(targetScale);
+      setOffset({
+        x: -clickX * (targetScale - 1),
+        y: -clickY * (targetScale - 1),
+      });
+    }
+  }, [scale]);
+
   // Pointer events (mouse + touch drag)
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === "touch") return; // handled by touch events
@@ -124,6 +145,30 @@ export function ImageLightbox({
       const dy = e.touches[1].clientY - e.touches[0].clientY;
       pinchStart.current = { dist: Math.hypot(dx, dy), scale };
     } else {
+      const now = Date.now();
+      if (now - lastTouchTime.current < 300) {
+        e.preventDefault();
+        // Double tap!
+        if (scale > 1) {
+          setScale(1);
+          setOffset({ x: 0, y: 0 });
+        } else {
+          const targetScale = 2.5;
+          const rect = e.currentTarget.getBoundingClientRect();
+          const touch = e.touches[0];
+          const touchX = touch.clientX - rect.left - rect.width / 2;
+          const touchY = touch.clientY - rect.top - rect.height / 2;
+          setScale(targetScale);
+          setOffset({
+            x: -touchX * (targetScale - 1),
+            y: -touchY * (targetScale - 1),
+          });
+        }
+        lastTouchTime.current = 0;
+        return;
+      }
+      lastTouchTime.current = now;
+
       touchStartRef.current = e;
       dragStart.current = {
         x: e.touches[0].clientX,
@@ -253,6 +298,7 @@ export function ImageLightbox({
           src={images[idx]}
           alt={`${altBase} ${idx + 1}`}
           onLoad={() => setIsLoaded(true)}
+          onDoubleClick={handleDoubleClick}
           className="max-h-[calc(100dvh-120px)] max-w-[calc(100vw-80px)] rounded-lg object-contain shadow-2xl transition-opacity duration-300"
           style={{
             transform: `scale(${scale}) translate(${offset.x / scale}px, ${offset.y / scale}px)`,
