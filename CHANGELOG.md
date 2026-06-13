@@ -4,6 +4,28 @@ Semua perubahan penting pada project **Apamurahbanget** akan dicatat di file ini
 
 ---
 
+## [1.5.0] - 2026-06-13
+
+### Added
+- **Sistem Easing Token CSS:** Menambahkan 4 variabel easing global di `:root` — `--ease-out-quart`, `--ease-out-quint`, `--ease-out-expo`, dan `--ease-in-out-smooth` — agar seluruh animasi berbagi kurva yang konsisten dan terasa alami.
+- **Animasi `rise-soft`:** Keyframe baru untuk entry card — fade + translateY + blur ringan yang hilang bersamaan — digunakan pada grid VillaCard dengan stagger berbasis CSS custom property `--i`.
+- **Animasi `drawer-up`:** Keyframe untuk bottom drawer (filter & sort modal) yang muncul dari bawah dengan skala ringan, menggantikan transition statis.
+- **Animasi `backdrop-focus`:** Keyframe untuk overlay backdrop yang blur-in secara bertahap saat modal dibuka, memberikan kesan fokus yang lebih sinematik.
+- **Animasi `hero-image`:** Keyframe slow Ken-Burns untuk gambar hero (scale + saturate) selama 12 detik.
+- **Animasi `float-gentle`:** Keyframe loop melayang naik-turun 8px selama 7 detik, digunakan untuk elemen dekoratif.
+- **Utilitas CSS baru:** `.pressable` (alias `.press`), `.smooth-card` (alias `.lift`), `.glass-edge` (inset highlight + depth shadow).
+- **Tombol Clear Search di Katalog:** Ikon ✕ muncul di dalam input pencarian saat ada teks, memungkinkan pengguna menghapus query dengan satu tap.
+
+### Changed
+- **Stagger VillaCard — CSS-based:** Penundaan animasi kartu pada grid katalog kini dikendalikan via `--i` CSS custom property (capped di 8) + `animation-delay: calc(var(--i) * 70ms)` di `animate-rise-soft`, menggantikan inline `animationDelay` JS yang kurang efisien.
+- **Overlay Backdrop Filter & Sort:** Kini menggunakan `animate-backdrop-focus` untuk transisi blur yang lebih halus, dan drawer modal menggunakan `animate-drawer-up`.
+- **Timing Animasi Global Lebih Presisi:** `.animate-fade-up` diperbarui ke `0.64s var(--ease-out-quint)`, `.animate-fade-in` ke `0.42s var(--ease-out-quart)`, `.animate-slide-in` ke `var(--ease-out-quint)`.
+- **`.press` / `.lift` — Transisi Lebih Halus:** Durasi dan easing diperbarui; `.press:active` kini `scale(0.975)` + `translateY(1px)`.
+- **Layout Katalog:** Sidebar desktop diperlebar dari `280px` menjadi `300px`; gap grid kartu dikurangi dari `gap-8` ke `gap-6` (dengan `xl:gap-7`) untuk tampilan lebih padat dan rapi.
+- **`LazyImage` — Placeholder Error:** Styling placeholder "foto belum bisa dimuat" diperhalus.
+
+---
+
 ## [1.4.0] - 2026-06-13
 
 ### Removed
