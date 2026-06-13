@@ -4,6 +4,44 @@ Semua perubahan penting pada project **Apamurahbanget** akan dicatat di file ini
 
 ---
 
+## [1.3.0] - 2026-06-13
+
+### Added
+- **LazyImage — Error State:** Menampilkan placeholder "Foto belum bisa dimuat" dengan ikon bergaya saat gambar gagal di-fetch (`onError` handler).
+- **LazyImage — Priority & Sizes Props:** Mendukung prop `priority` (fetch priority `"high"`) dan `sizes` (responsive image hints) untuk mengoptimalkan LCP (Largest Contentful Paint) pada gambar pertama yang terlihat.
+- **VillaCard — Intersection Observer per Kartu:** Setiap `VillaCard` kini memiliki observer sendiri dengan `rootMargin: 360px` sehingga gambar pra-di-load sebelum masuk viewport tanpa bergantung pada LazyImage global.
+- **VillaCard — Hover State & Image Carousel Otomatis:** Kartu villa menampilkan navigasi panah dan indikator halaman saat di-hover; tanda lokasi (`MapPin`) muncul di bawah nama villa.
+- **MobileBottomNav — Desain Floating Pill:** Nav bar bawah kini berbentuk pill mengambang (`rounded-[1.45rem]`) dengan border tipis, shadow dinamis, dan backdrop blur. Indikator tab aktif berubah menjadi garis tipis di atas ikon + efek glow blur pada ikon.
+- **ScrollToTop Component:** Komponen baru yang mengembalikan posisi scroll ke atas saat navigasi halaman berubah.
+
+### Changed
+- **VillaCard — Redesain Kartu Total:** Layout kartu diubah menjadi lebih premium dengan rasio aspek gambar 4:3, badge lokasi, animasi hover lift (`translateY(-4px)`), dan tampilan rating + harga yang lebih terstruktur.
+- **VillaFilters — Pembaruan Drawer Filter Mobile:** Tombol filter dan sort di mobile diperbarui agar konsisten dengan desain baru; drawer menutup dengan transisi halus.
+- **LazyImage — Transisi Fade Lebih Halus:** Durasi dan kurva animasi fade-in gambar disesuaikan ke `420ms cubic-bezier(0.22, 1, 0.36, 1)` untuk kesan premium.
+- **`vite.config.ts` — Optimasi Build:** Menambahkan konfigurasi chunk splitting dan optimasi bundle untuk memperkecil ukuran output produksi.
+- **`styles.css` — Token Desain & Utilitas Baru:** Menambahkan variabel warna, animasi `animate-fade-in`, dan class utilitas pendukung komponen baru.
+
+### Fixed
+- **MobileBottomNav — Safe Area Inset:** Padding bottom kini menggunakan `pb-[max(env(safe-area-inset-bottom),0.5rem)]` via Tailwind class menggantikan inline style, menghindari potensi konflik CSS.
+
+---
+
+## [1.2.0] - 2026-06-13
+
+### Added
+- **Pola Desain High-End:** Menerapkan prinsip desain premium dari skill `high-end-visual-design` ke seluruh halaman utama, katalog villa, dan halaman detail villa.
+- **Komponen `ScrollToTop`:** Menambahkan komponen baru yang secara otomatis menggulir halaman ke posisi atas pada setiap perubahan navigasi rute.
+- **Komponen `WhatsAppButton` — Peningkatan Aksesibilitas:** Atribut `aria-label` ditambahkan untuk mendukung pembaca layar.
+- **Hook `use-favorites` — Hydrasi SSR-Safe:** Memperbaiki race condition saat data favorit dari `localStorage` diinisialisasi sebelum komponen di-mount di browser.
+
+### Changed
+- **Halaman Beranda (`index.tsx`) — Hero & Grid Katalog:** Hero section didesain ulang dengan tipografi skala besar, gradien latar yang lebih dramatis, dan grid villa menggunakan layout yang lebih lega dan responsif.
+- **Halaman Katalog (`villas.index.tsx`) — Performa & UX:** Mendukung prop `priority` pada 4 kartu pertama yang terlihat untuk mempercepat LCP; filter dan sort tetap dalam satu baris tanpa tumpang tindih di semua breakpoint.
+- **Halaman Detail (`villas.$slug.tsx`) — Galeri & Sidebar:** Layout galeri utama diperbarui; sidebar booking menjadi lebih kompak dengan hierarki informasi yang lebih jelas.
+- **Rendering Gambar — Optimasi Menyeluruh:** Menambahkan `fetchPriority="high"` pada gambar hero dan `decoding="async"` secara konsisten di seluruh komponen gambar.
+
+---
+
 ## [1.1.0] - 2026-06-13
 
 ### Added
