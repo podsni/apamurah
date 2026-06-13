@@ -53,14 +53,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const areas = [
-  { name: "Songgoriti" as Area, from: "Rp 850 rb", desc: "Villa kolam pribadi" },
-  { name: "Batu Kota" as Area, from: "Rp 1,1 jt", desc: "Dekat pusat kota" },
-  { name: "Bumiaji" as Area, from: "Rp 1,7 jt", desc: "View pegunungan" },
-  { name: "Pujon" as Area, from: "Rp 950 rb", desc: "Sejuk & tenang" },
-  { name: "Coban Rondo" as Area, from: "Rp 1,4 jt", desc: "Dekat wisata" },
-];
-
 const stats = [
   { value: "120+", label: "Villa Pilihan" },
   { value: "98%", label: "Tamu Puas" },
@@ -97,7 +89,6 @@ function Nav() {
           <nav className="hidden items-center gap-1 lg:flex">
             {[
               { label: "Semua Villa", to: "/villas", search: DEFAULT_SEARCH },
-              { label: "Area", href: "#areas" },
               { label: "Tentang", href: "#about" },
               { label: "Kontak", href: "#contact" },
             ].map((item) => (
@@ -147,7 +138,6 @@ function Nav() {
             <nav className="flex flex-col items-center justify-center h-full gap-8 p-6">
               {[
                 { label: "Semua Villa", to: "/villas", search: DEFAULT_SEARCH },
-                { label: "Area", href: "#areas" },
                 { label: "Tentang", href: "#about" },
                 { label: "Kontak", href: "#contact" },
               ].map((item, i) => (
@@ -252,75 +242,12 @@ function Hero() {
               </button>
             </div>
           </form>
-
-          <div className="mt-4 flex flex-wrap justify-center gap-2 sm:mt-6 sm:gap-3">
-            {["Songgoriti", "Batu Kota", "Bumiaji"].map((area, i) => (
-              <Link
-                key={area}
-                to="/villas"
-                search={{ ...DEFAULT_SEARCH, area: [area as Area] }}
-                className="rounded-full border border-white/12 bg-white/8 px-3.5 py-1.5 text-xs font-bold text-white/82 transition-all hover:border-white/30 hover:bg-white/15 animate-fade-in sm:px-4 sm:py-2"
-                style={{ animationDelay: `${600 + i * 100}ms` }}
-              >
-                {area}
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
       <div className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 animate-bounce opacity-40 sm:block">
         <div className="w-px h-12 bg-gradient-to-b from-white to-transparent" />
-      </div>
-    </section>
-  );
-}
-
-function Locations() {
-  return (
-    <section id="areas" className="mx-auto max-w-7xl px-4 py-9 sm:px-6 sm:py-12">
-      <div className="mb-6 flex items-end justify-between gap-4 sm:mb-10">
-        <div>
-          <h2 className="font-serif text-[2rem] leading-none tracking-tight text-foreground sm:text-4xl md:text-5xl">
-            Jelajahi Area di Batu
-          </h2>
-          <p className="mt-2 max-w-md text-[0.95rem] leading-6 text-muted-foreground sm:text-base">
-            Dari pegunungan hingga pusat kota — pilih suasana liburanmu.
-          </p>
-        </div>
-        <Link
-          to="/villas"
-          search={DEFAULT_SEARCH}
-          className="hidden items-center gap-1.5 whitespace-nowrap text-sm font-medium text-primary transition-colors hover:text-primary/80 sm:inline-flex"
-        >
-          Lihat Semua <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-      <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 md:grid-cols-5">
-        {areas.map((l, i) => (
-          <Link
-            key={l.name}
-            to="/villas"
-            search={{ ...DEFAULT_SEARCH, area: [l.name] }}
-            className="group relative flex min-h-[7.25rem] items-center gap-4 overflow-hidden rounded-[1.35rem] border border-border/65 bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[var(--shadow-sky)] min-[420px]:block min-[420px]:min-h-[9.25rem] min-[420px]:p-5 sm:p-6"
-            style={{ animationDelay: `${i * 80}ms` }}
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/9 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground min-[420px]:h-9 min-[420px]:w-9">
-              <MapPin className="h-4 w-4" />
-            </span>
-            <div className="min-w-0 min-[420px]:mt-3">
-              <h3 className="text-base font-semibold leading-tight text-foreground min-[420px]:text-sm sm:text-base">
-                {l.name}
-              </h3>
-              <p className="mt-0.5 text-sm text-muted-foreground min-[420px]:text-xs">{l.desc}</p>
-              <p className="mt-1.5 text-sm font-semibold text-primary min-[420px]:mt-3 min-[420px]:font-medium">
-                Mulai {l.from}
-              </p>
-            </div>
-            <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-muted-foreground/45 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-primary min-[420px]:absolute min-[420px]:bottom-5 min-[420px]:right-5" />
-          </Link>
-        ))}
       </div>
     </section>
   );
@@ -631,14 +558,6 @@ function Footer() {
               </li>
               <li>
                 <a
-                  href="#areas"
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
-                >
-                  Area Populer
-                </a>
-              </li>
-              <li>
-                <a
                   href="#about"
                   className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
@@ -711,7 +630,6 @@ function Index() {
     <main className="min-h-screen bg-background text-foreground antialiased">
       <Nav />
       <Hero />
-      <Locations />
       <Stats />
       <Villas />
       <Experience />
