@@ -40,6 +40,7 @@ export function LazyImage({
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (shouldLoadImmediately) return;
@@ -59,6 +60,19 @@ export function LazyImage({
     observer.observe(el);
     return () => observer.disconnect();
   }, [shouldLoadImmediately]);
+
+  useEffect(() => {
+    setIsLoaded(false);
+    setIsError(false);
+  }, [src]);
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!isInView || !img) return;
+    if (img.complete && img.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+  }, [isInView, src]);
 
   const containerStyle = aspectRatio
     ? { aspectRatio, position: "relative" as const, overflow: "hidden" as const }
@@ -96,6 +110,7 @@ export function LazyImage({
 
       {isInView && (
         <img
+          ref={imgRef}
           src={src}
           alt={alt}
           decoding="async"

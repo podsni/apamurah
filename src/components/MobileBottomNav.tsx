@@ -36,7 +36,7 @@ export function MobileBottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 lg:hidden pb-[max(env(safe-area-inset-bottom),0.5rem)]"
     >
       <div className="mx-auto max-w-[26rem] px-4">
-        <div className="overflow-hidden rounded-[1.45rem] border border-border/70 bg-card/92 shadow-[0_12px_34px_-18px_rgb(20_50_90/0.45)] backdrop-blur-2xl dark:border-white/10 dark:bg-black/82">
+        <div className="glass-edge overflow-hidden rounded-[1.45rem] border border-border/70 bg-card/92 backdrop-blur-2xl dark:border-white/10 dark:bg-black/82">
           <ul className="grid h-14 grid-cols-3">
             {items.map((it) => {
               const active = it.match(path);
@@ -47,7 +47,7 @@ export function MobileBottomNav() {
                   <Link
                     to={it.to}
                     aria-current={active ? "page" : undefined}
-                    className="flex h-full w-full flex-col items-center justify-center gap-0.5 transition-all duration-300"
+                    className="pressable flex h-full w-full flex-col items-center justify-center gap-0.5"
                   >
                     <div className="relative group">
                       <div
@@ -59,9 +59,9 @@ export function MobileBottomNav() {
                       />
                       <Icon
                         className={
-                          "relative z-10 h-[1.15rem] w-[1.15rem] transition-all duration-500 " +
+                          "relative z-10 h-[1.15rem] w-[1.15rem] transition-all duration-300 ease-[var(--ease-out-quart)] " +
                           (active
-                            ? "stroke-[2.35] text-primary " +
+                            ? "-translate-y-0.5 scale-110 stroke-[2.35] text-primary " +
                               (it.key === "fav" ? "fill-red-500 stroke-red-500" : "")
                             : "stroke-[2] text-muted-foreground group-hover:text-foreground")
                         }

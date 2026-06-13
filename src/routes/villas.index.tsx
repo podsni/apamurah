@@ -2,9 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import type { z as zType } from "zod";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import {
-  Search,
   Search as SearchIcon,
   SlidersHorizontal,
   X,
@@ -62,7 +61,7 @@ export const Route = createFileRoute("/villas/")({
 
 function VillasList() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/villas" });
+  const navigate = useNavigate({ from: "/villas/" });
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [qInput, setQInput] = useState(search.q);
@@ -204,50 +203,89 @@ function VillasList() {
       <div className="mx-auto max-w-7xl px-4 pb-28 pt-24 sm:px-6 sm:pt-28 lg:pb-16">
         {/* Page Header */}
         <section className="mb-6 animate-fade-up sm:mb-10">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Link
-                  to="/"
-                  className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Beranda
-                </Link>
-                <span className="text-[10px] text-muted-foreground/40">/</span>
-                <span className="text-xs font-bold uppercase tracking-widest text-foreground">
-                  Semua Villa
-                </span>
+          <div className="glass-edge rounded-[2rem] border border-border/60 bg-card/80 p-5 backdrop-blur-xl sm:p-7 lg:rounded-[2.5rem]">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="mb-2 flex items-center gap-2">
+                  <Link
+                    to="/"
+                    className="text-xs font-bold uppercase tracking-widest text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Beranda
+                  </Link>
+                  <span className="text-[10px] text-muted-foreground/40">/</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-foreground">
+                    Semua Villa
+                  </span>
+                </div>
+                <h1 className="font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
+                  Villa di Batu
+                </h1>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  Ditemukan {results.length} villa pilihan yang siap kamu booking.
+                </p>
               </div>
-              <h1 className="font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
-                Villa di Batu
-              </h1>
-              <p className="mt-2 text-muted-foreground font-medium">
-                Ditemukan {results.length} villa pilihan yang siap kamu booking.
-              </p>
+
+              <div className="hidden lg:block">
+                <div className="relative rounded-full border border-black/[0.03] bg-black/5 p-1 dark:border-white/10 dark:bg-white/5">
+                  <select
+                    value={search.sort}
+                    onChange={(e) =>
+                      handleFilterChange({ sort: e.target.value as SearchValues["sort"] })
+                    }
+                    className="h-10 cursor-pointer appearance-none bg-transparent pl-5 pr-10 text-xs font-bold uppercase tracking-widest text-foreground focus:outline-none"
+                  >
+                    <option value="recommended">Rekomendasi</option>
+                    <option value="price-asc">Harga Termurah</option>
+                    <option value="price-desc">Harga Termahal</option>
+                    <option value="rating">Rating Tertinggi</option>
+                  </select>
+                  <ArrowUpDown className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                </div>
+              </div>
             </div>
 
-            <div className="hidden lg:block">
-              <div className="relative p-1 rounded-full bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
-                <select
-                  value={search.sort}
-                  onChange={(e) =>
-                    handleFilterChange({ sort: e.target.value as SearchValues["sort"] })
-                  }
-                  className="appearance-none bg-transparent h-10 pl-5 pr-10 text-xs font-bold uppercase tracking-widest text-foreground focus:outline-none cursor-pointer"
-                >
-                  <option value="recommended">Rekomendasi</option>
-                  <option value="price-asc">Harga Termurah</option>
-                  <option value="price-desc">Harga Termahal</option>
-                  <option value="rating">Rating Tertinggi</option>
-                </select>
-                <ArrowUpDown className="absolute right-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate({
+                  search: (prev: SearchValues) => ({ ...prev, q: qInput }),
+                  replace: true,
+                });
+              }}
+              className="mt-5 sm:hidden"
+            >
+              <div className="flex h-12 items-center gap-2 rounded-2xl border border-border/70 bg-background px-4 shadow-inner">
+                <SearchIcon className="h-4.5 w-4.5 shrink-0 text-muted-foreground" />
+                <input
+                  value={qInput}
+                  onChange={(e) => setQInput(e.target.value)}
+                  placeholder="Cari villa, area, fasilitas..."
+                  className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+                />
+                {qInput && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQInput("");
+                      navigate({
+                        search: (prev: SearchValues) => ({ ...prev, q: "" }),
+                        replace: true,
+                      });
+                    }}
+                    className="grid h-7 w-7 place-items-center rounded-full bg-secondary text-muted-foreground"
+                    aria-label="Hapus pencarian"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
-            </div>
+            </form>
           </div>
         </section>
 
         <div className="sticky top-[4.75rem] z-30 mb-7 lg:hidden">
-          <div className="rounded-[1.35rem] border border-border/70 bg-background/86 p-1.5 shadow-[0_14px_34px_-24px_rgb(20_50_90/0.45)] backdrop-blur-2xl">
+          <div className="rounded-[1.35rem] border border-border/70 bg-background/90 p-1.5 shadow-[0_14px_34px_-24px_rgb(20_50_90/0.45)] backdrop-blur-2xl">
             <div className="grid grid-cols-2 gap-1.5">
               <button
                 type="button"
@@ -274,7 +312,7 @@ function VillasList() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr] xl:gap-10">
           {/* Sidebar Filter */}
           <aside className="hidden lg:block animate-fade-in delay-200">
             <div className="sticky top-28 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
@@ -303,12 +341,12 @@ function VillasList() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:gap-7 2xl:grid-cols-3">
                 {results.map((v, i) => (
                   <div
                     key={v.slug}
-                    className="animate-fade-up"
-                    style={{ animationDelay: `${i * 50}ms` }}
+                    className="animate-rise-soft"
+                    style={{ "--i": Math.min(i, 8) } as CSSProperties}
                   >
                     <VillaCard villa={v} priority={i === 0} />
                   </div>
@@ -322,15 +360,15 @@ function VillasList() {
       {/* Mobile Modals */}
 
       {filtersOpen && (
-        <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
+        <div className="fixed inset-0 z-[60] flex animate-fade-in lg:hidden">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 animate-backdrop-focus bg-black/60"
             onClick={() => setFiltersOpen(false)}
           />
           <div
             role="dialog"
             aria-modal="true"
-            className="relative mt-auto flex max-h-[86vh] w-full flex-col overflow-hidden rounded-t-[2rem] bg-background shadow-2xl"
+            className="relative mt-auto flex max-h-[86vh] w-full flex-col overflow-hidden rounded-t-[2rem] bg-background shadow-2xl animate-drawer-up"
           >
             <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-muted" />
             <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
@@ -358,15 +396,15 @@ function VillasList() {
       )}
 
       {sortOpen && (
-        <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
+        <div className="fixed inset-0 z-[60] flex animate-fade-in lg:hidden">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 animate-backdrop-focus bg-black/60"
             onClick={() => setSortOpen(false)}
           />
           <div
             role="dialog"
             aria-modal="true"
-            className="relative mt-auto w-full rounded-t-[2rem] bg-background p-4 shadow-2xl sm:p-6"
+            className="relative mt-auto w-full rounded-t-[2rem] bg-background p-4 shadow-2xl animate-drawer-up sm:p-6"
           >
             <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-muted" />
             <h2 className="mb-6 text-xl font-black tracking-tight text-foreground px-2">Urutkan</h2>

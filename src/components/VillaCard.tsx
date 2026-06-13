@@ -111,14 +111,14 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
   return (
     <article
       ref={cardRef}
-      className="group relative flex flex-col transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+      className="smooth-card group relative flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Outer Shell (Double Bezel) */}
-      <div className="relative p-1.5 rounded-[2rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 overflow-hidden">
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-black/[0.04] bg-black/5 p-1.5 dark:border-white/10 dark:bg-white/5 sm:rounded-[2rem]">
         {/* Inner Core */}
-        <div className="relative overflow-hidden rounded-[calc(2rem-0.375rem)] bg-card shadow-[0_4px_20px_-4px_rgba(20,50,90,0.1)]">
+        <div className="relative overflow-hidden rounded-[calc(1.75rem-0.375rem)] bg-card shadow-[0_4px_20px_-4px_rgba(20,50,90,0.1)] sm:rounded-[calc(2rem-0.375rem)]">
           {/* Image carousel container */}
           <div
             className="relative overflow-hidden bg-muted cursor-pointer"
@@ -136,7 +136,7 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
               <LazyImage
                 src={villa.images[imgIdx] ?? villa.cover}
                 alt={`${villa.name} — foto ${imgIdx + 1}`}
-                className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-[1.045]"
+                className="h-full w-full object-cover transition-transform duration-1000 ease-[var(--ease-out-quart)] group-hover:scale-[1.045]"
                 wrapperClassName="h-full w-full"
                 aspectRatio="4/3"
                 eager={priority && imgIdx === 0}
@@ -147,7 +147,7 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
             </Link>
 
             {/* Top Badges */}
-            <div className="absolute top-3 inset-x-3 z-10 flex items-center justify-between">
+            <div className="absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-2">
               <span className="rounded-full bg-white/90 dark:bg-black/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground shadow-sm backdrop-blur-md border border-white/20">
                 {villa.tag}
               </span>
@@ -165,7 +165,7 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
                 e.stopPropagation();
                 toggle(villa.slug);
               }}
-              className="absolute right-3 bottom-3 z-20 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/20 transition-all duration-300 hover:bg-white/20 active:scale-90"
+              className="pressable absolute bottom-3 right-3 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/12 text-white shadow-sm backdrop-blur-md hover:bg-white/22"
               aria-label={fav ? "Hapus dari favorit" : "Tambah ke favorit"}
             >
               <Heart
@@ -193,20 +193,20 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
                 <button
                   onClick={prevImg}
                   aria-label="Foto sebelumnya"
-                  className="absolute left-3 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/10 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-x-1"
+                  className="absolute left-3 top-1/2 z-20 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:-translate-x-1 group-hover:opacity-100 sm:grid"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
                   onClick={nextImg}
                   aria-label="Foto berikutnya"
-                  className="absolute right-3 top-1/2 z-20 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white backdrop-blur-md border border-white/10 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1"
+                  className="absolute right-3 top-1/2 z-20 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 sm:grid"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
 
                 {/* Micro indicators */}
-                <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 px-3 py-1.5 rounded-full bg-black/20 backdrop-blur-sm border border-white/5">
+                <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 gap-1.5 rounded-full border border-white/5 bg-black/20 px-3 py-1.5 backdrop-blur-sm">
                   {villa.images.slice(0, Math.min(total, 6)).map((_, i) => (
                     <div
                       key={i}
@@ -222,14 +222,14 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
           </div>
 
           {/* Card Body */}
-          <div className="flex flex-col p-5 sm:p-6 bg-card">
+          <div className="flex flex-col bg-card p-4 sm:p-6">
             <div className="flex justify-between items-start gap-3">
               <Link
                 to="/villas/$slug"
                 params={{ slug: villa.slug }}
                 className="group/title block min-w-0"
               >
-                <h3 className="text-lg font-bold tracking-tight text-foreground transition-colors duration-300 group-hover/title:text-primary truncate">
+                <h3 className="truncate text-[1.05rem] font-black tracking-tight text-foreground transition-colors duration-300 group-hover/title:text-primary sm:text-lg">
                   {villa.name}
                 </h3>
                 <div className="mt-1 flex items-center gap-1.5 text-muted-foreground">
@@ -240,34 +240,34 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
             </div>
 
             {/* Specs with better visual rhythm */}
-            <div className="mt-5 flex items-center gap-4 text-xs font-medium text-muted-foreground">
-              <div className="flex items-center gap-1.5">
+            <div className="mt-4 grid grid-cols-3 gap-2 rounded-2xl bg-secondary/45 p-2 text-[11px] font-bold text-muted-foreground sm:mt-5 sm:text-xs">
+              <div className="flex items-center justify-center gap-1.5 rounded-xl bg-card/60 px-2 py-2">
                 <BedDouble className="h-4 w-4 text-primary/60" />
                 <span>{villa.bedrooms} KT</span>
               </div>
-              <div className="w-px h-3 bg-border" />
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center justify-center gap-1.5 rounded-xl bg-card/60 px-2 py-2">
                 <Bath className="h-4 w-4 text-primary/60" />
                 <span>{villa.bathrooms} KM</span>
               </div>
-              <div className="w-px h-3 bg-border" />
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center justify-center gap-1.5 rounded-xl bg-card/60 px-2 py-2">
                 <Users className="h-4 w-4 text-primary/60" />
                 <span>{villa.guests} Tamu</span>
               </div>
             </div>
 
             {/* Price section with "machined" look */}
-            <div className="mt-6 flex items-center justify-between gap-4 pt-5 border-t border-border/60">
+            <div className="mt-5 flex items-end justify-between gap-3 border-t border-border/60 pt-4 sm:mt-6 sm:gap-4 sm:pt-5">
               <div className="flex flex-col">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 leading-none mb-1.5">
                   Mulai dari
                 </span>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-xl font-black text-foreground tabular-nums leading-none tracking-tight">
+                  <span className="text-lg font-black leading-none tracking-tight text-foreground tabular-nums sm:text-xl">
                     {formatIDR(villa.price)}
                   </span>
-                  <span className="text-[10px] font-bold text-muted-foreground">/ malam</span>
+                  <span className="hidden text-[10px] font-bold text-muted-foreground min-[380px]:inline">
+                    / malam
+                  </span>
                 </div>
               </div>
 
@@ -276,7 +276,7 @@ export function VillaCard({ villa, priority = false }: { villa: Villa; priority?
                 size="sm"
                 label="Pesan"
                 message={`Halo Apamurahbanget, saya mau pesan ${villa.name}. Mohon info ketersediaan & harga.`}
-                className="rounded-full shadow-lg shadow-primary/10 hover:shadow-primary/20 active:scale-95 transition-all"
+                className="shrink-0 rounded-full shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20 active:scale-95"
               />
             </div>
           </div>

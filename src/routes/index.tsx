@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import heroImg from "@/assets/hero-villa-batu.jpg";
 import villa2 from "@/assets/villa-2.jpg";
 import villa3 from "@/assets/villa-3.jpg";
@@ -81,7 +81,7 @@ function Nav() {
     <div className="fixed inset-x-0 top-3 z-50 px-4 pointer-events-none sm:top-6">
       <header className="mx-auto max-w-7xl pointer-events-auto">
         {/* Floating Island Nav */}
-        <div className="mx-auto flex h-[3.25rem] items-center justify-between rounded-full border border-black/5 bg-white/86 px-2.5 shadow-[0_10px_36px_-18px_rgb(20_50_90/0.35)] backdrop-blur-2xl dark:border-white/10 dark:bg-black/80 sm:h-14">
+        <div className="glass-edge mx-auto flex h-[3.25rem] items-center justify-between rounded-full border border-black/5 bg-white/86 px-2.5 backdrop-blur-2xl dark:border-white/10 dark:bg-black/80 sm:h-14">
           <div className="pl-2 sm:pl-4">
             <Logo />
           </div>
@@ -187,30 +187,29 @@ function Hero() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative flex min-h-[min(780px,88dvh)] items-center justify-center overflow-hidden px-4 pb-12 pt-24 sm:min-h-[90dvh] sm:pb-16 sm:pt-28">
+    <section className="relative flex min-h-[min(780px,88dvh)] items-center justify-center overflow-hidden px-4 pb-12 pt-24 sm:min-h-[90dvh] sm:pb-16 sm:pt-28 lg:justify-start lg:px-8">
       {/* Background Cinematic Texture */}
       <div className="absolute inset-0 z-0">
         <img
           src={heroImg}
           alt="Cinematic Villa Batu"
-          className="h-full w-full object-cover scale-105 animate-fade-in"
-          style={{ animationDuration: "2s" }}
+          className="h-full w-full object-cover animate-hero-image"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/62 via-black/24 to-background lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.45)_42%,rgba(0,0,0,0.14)_72%,rgba(0,0,0,0.42)_100%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl text-center">
+      <div className="relative z-10 mx-auto w-full max-w-7xl text-center lg:text-left">
         <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md animate-fade-in sm:px-4 sm:tracking-[0.2em]">
           <Sparkles className="h-3.5 w-3.5" /> 120+ Villa Pilihan di Batu
         </div>
 
-        <h1 className="mx-auto mt-6 max-w-[11ch] font-serif text-[clamp(2.9rem,15vw,4.35rem)] leading-[0.95] tracking-[-0.045em] text-white animate-fade-up sm:mt-8 sm:max-w-none sm:text-[5rem] md:text-[6.5rem]">
+        <h1 className="mx-auto mt-6 max-w-[11ch] font-serif text-[clamp(2.9rem,15vw,4.35rem)] leading-[0.95] tracking-[-0.035em] text-white animate-fade-up sm:mt-8 sm:max-w-none sm:text-[5rem] md:text-[6rem] lg:mx-0 lg:max-w-[9.6ch]">
           Temukan Villa <br />
           <span className="italic text-white/90">Impianmu</span> di Batu.
         </h1>
 
         <p
-          className="mx-auto mt-5 max-w-[22rem] text-[0.98rem] font-medium leading-7 text-white/88 animate-fade-up delay-200 sm:mt-8 sm:max-w-2xl sm:text-xl md:text-2xl"
+          className="mx-auto mt-5 max-w-[22rem] text-[0.98rem] font-medium leading-7 text-white/88 animate-fade-up delay-200 sm:mt-8 sm:max-w-2xl sm:text-xl md:text-2xl lg:mx-0 lg:max-w-xl"
           style={{ textWrap: "balance" }}
         >
           Properti terseleksi dengan harga transparan. Pesan langsung lewat WhatsApp dalam hitungan
@@ -218,13 +217,13 @@ function Hero() {
         </p>
 
         {/* Floating Search Hub */}
-        <div className="mx-auto mt-8 max-w-2xl animate-fade-up delay-400 sm:mt-12 sm:px-4">
+        <div className="mx-auto mt-8 max-w-2xl animate-fade-up delay-400 sm:mt-12 sm:px-4 lg:mx-0 lg:px-0">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               navigate({ to: "/villas", search: { ...DEFAULT_SEARCH, q } });
             }}
-            className="group relative rounded-[1.65rem] border border-white/20 bg-white/12 p-1.5 shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:border-white/30 sm:rounded-[2.5rem] sm:p-2 sm:hover:scale-[1.01]"
+            className="glass-edge group relative rounded-[1.65rem] border border-white/20 bg-white/12 p-1.5 backdrop-blur-2xl transition-all duration-500 ease-[var(--ease-out-quart)] hover:border-white/30 sm:rounded-[2.5rem] sm:p-2 sm:hover:scale-[1.01]"
           >
             <div className="flex h-14 items-center gap-2 pl-4 pr-1.5 sm:h-16 sm:gap-3 sm:pl-6 sm:pr-2">
               <Search className="h-5 w-5 shrink-0 text-white/65 sm:h-6 sm:w-6" />
@@ -236,7 +235,7 @@ function Hero() {
               />
               <button
                 type="submit"
-                className="h-11 shrink-0 rounded-full bg-white px-5 text-xs font-black uppercase tracking-[0.14em] text-black transition-all duration-300 hover:bg-primary hover:text-white sm:h-12 sm:px-8 sm:text-sm"
+                className="pressable h-11 shrink-0 rounded-full bg-white px-5 text-xs font-black uppercase tracking-[0.14em] text-black hover:bg-primary hover:text-white sm:h-12 sm:px-8 sm:text-sm"
               >
                 Cari
               </button>
@@ -245,9 +244,23 @@ function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 animate-bounce opacity-40 sm:block">
-        <div className="w-px h-12 bg-gradient-to-b from-white to-transparent" />
+      <div className="animate-float-gentle glass-edge absolute bottom-24 right-8 z-10 hidden w-[18rem] overflow-hidden rounded-[1.75rem] border border-white/18 bg-white/12 p-3 text-white backdrop-blur-2xl lg:block">
+        <div className="overflow-hidden rounded-[1.15rem]">
+          <img
+            src={villa2}
+            alt="Preview interior villa Batu"
+            className="h-32 w-full object-cover"
+          />
+        </div>
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-black">Siap dibantu pilihkan</p>
+            <p className="mt-0.5 text-xs text-white/70">Balasan cepat via WhatsApp</p>
+          </div>
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-primary">
+            24/7
+          </span>
+        </div>
       </div>
     </section>
   );
@@ -255,19 +268,83 @@ function Hero() {
 
 function Stats() {
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 sm:pb-20">
-      <div className="rounded-3xl bg-[var(--surface)] p-8 sm:p-10">
-        <div className="mb-6 flex items-center gap-2.5 text-sm text-muted-foreground">
-          <ShieldCheck className="h-4.5 w-4.5 text-accent" />
-          <span>Dipercaya ribuan tamu setiap bulannya</span>
+    <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16">
+      <div className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/72 p-5 shadow-[0_24px_80px_-48px_rgb(20_50_90/0.45)] backdrop-blur-xl dark:border-white/10 dark:bg-white/5 sm:rounded-[2.5rem] sm:p-8">
+        <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-3 py-1.5 font-semibold text-primary">
+            <ShieldCheck className="h-4 w-4" /> Dipercaya ribuan tamu
+          </span>
+          <span className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
+            Villa Batu • WhatsApp booking • Harga transparan
+          </span>
         </div>
-        <div className="grid grid-cols-2 gap-8 sm:gap-10 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label}>
-              <div className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+          {stats.map((s, index) => (
+            <div
+              key={s.label}
+              className="smooth-card animate-rise-soft rounded-2xl border border-border/60 bg-card/82 p-4 shadow-[var(--shadow-soft)] sm:p-5"
+              style={{ "--i": index } as CSSProperties}
+            >
+              <div className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
                 {s.value}
               </div>
-              <div className="mt-1.5 text-sm text-muted-foreground">{s.label}</div>
+              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-[13px]">
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BookingFlow() {
+  const steps = [
+    {
+      label: "Pilih villa",
+      desc: "Cari berdasarkan kapasitas, budget, dan fasilitas yang paling penting.",
+    },
+    {
+      label: "Chat admin",
+      desc: "Klik Pesan, kami cek tanggal kosong dan kirim detail terbaru.",
+    },
+    {
+      label: "Booking aman",
+      desc: "Konfirmasi harga, DP, lalu tinggal datang dan menikmati Batu.",
+    },
+  ];
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 sm:pb-20">
+      <div className="grid gap-4 md:grid-cols-[0.9fr_1.4fr] md:items-stretch">
+        <div className="rounded-[2rem] bg-primary p-6 text-primary-foreground shadow-[0_28px_80px_-44px_rgb(20_80_160/0.7)] sm:p-8">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em]">
+            <Sparkles className="h-3.5 w-3.5" /> Booking tanpa ribet
+          </span>
+          <h2 className="mt-5 font-serif text-3xl leading-tight tracking-tight sm:text-4xl">
+            Dari cari villa sampai check-in, alurnya jelas.
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-primary-foreground/78">
+            Fokusnya bukan sekadar tampil cantik: pengunjung harus cepat paham, cepat percaya, dan
+            cepat klik WhatsApp.
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {steps.map((step, index) => (
+            <div
+              key={step.label}
+              className="smooth-card animate-rise-soft rounded-[1.75rem] border border-border/70 bg-card p-5 shadow-[var(--shadow-soft)]"
+              style={{ "--i": index + 1 } as CSSProperties}
+            >
+              <div className="grid h-10 w-10 place-items-center rounded-2xl bg-primary/10 text-sm font-black text-primary">
+                {index + 1}
+              </div>
+              <h3 className="mt-5 text-base font-black tracking-tight text-foreground">
+                {step.label}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -282,11 +359,14 @@ function Villas() {
     <section id="villas" className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 sm:pb-24 scroll-mt-20">
       <div className="mb-6 flex items-end justify-between gap-4 sm:mb-10">
         <div>
+          <span className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/12 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-accent-foreground/80">
+            <Star className="h-3.5 w-3.5 fill-current" /> Rekomendasi terkurasi
+          </span>
           <h2 className="font-serif text-[2rem] leading-none tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Villa Rekomendasi Kami
           </h2>
-          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-            Properti terseleksi dari host tepercaya di Batu.
+          <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">
+            Pilihan yang paling aman untuk keluarga, rombongan kecil, dan liburan dadakan.
           </p>
         </div>
         <Link
@@ -299,7 +379,9 @@ function Villas() {
       </div>
       <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-3">
         {featured.map((v, index) => (
-          <VillaCard key={v.slug} villa={v} priority={index === 0} />
+          <div key={v.slug} className="animate-rise-soft" style={{ "--i": index } as CSSProperties}>
+            <VillaCard villa={v} priority={index === 0} />
+          </div>
         ))}
       </div>
       <div className="mt-8 flex justify-center sm:hidden">
@@ -631,6 +713,7 @@ function Index() {
       <Nav />
       <Hero />
       <Stats />
+      <BookingFlow />
       <Villas />
       <Experience />
       <Contact />
