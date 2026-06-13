@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   ArrowLeft,
+  ArrowRight,
   BedDouble,
   Bath,
   Users,
@@ -78,11 +79,8 @@ function VillaDetail() {
     setLightboxOpen(true);
   };
 
-  // Airbnb-style: show first 5 in grid, rest behind "show all" button
-  const GRID_COUNT = 5;
-
   return (
-    <main className="min-h-screen bg-background text-foreground antialiased">
+    <main className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20">
       {lightboxOpen && (
         <ImageLightbox
           images={villa.images}
@@ -92,268 +90,225 @@ function VillaDetail() {
         />
       )}
 
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-              <Palmtree className="h-4 w-4" />
-            </div>
-            <span className="text-[15px] font-semibold tracking-tight text-foreground">
-              Apa<span className="text-primary">murahbanget</span>
-            </span>
-          </Link>
-          <Link
-            to="/villas"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Semua Villa
-          </Link>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-7">
-
-        {/* ── AIRBNB-STYLE 5-GRID GALLERY ── */}
-        <section aria-label="Galeri foto">
-
-          {/* Desktop: 5-grid mosaic | Mobile: 1 hero + 2x2 strip */}
-          <div className="relative">
-
-            {/* Mobile gallery — hero + row of 4 */}
-            <div className="grid grid-cols-2 grid-rows-[220px_110px] gap-1.5 overflow-hidden rounded-xl sm:hidden">
-              {/* Main big image */}
-              <button
-                className="col-span-2 row-span-1 overflow-hidden rounded-none"
-                onClick={() => openLightbox(0)}
-                aria-label="Buka galeri foto"
+      {/* Floating Navigation Hub */}
+      <div className="fixed top-6 inset-x-0 z-40 px-4 pointer-events-none">
+        <header className="mx-auto max-w-7xl pointer-events-auto">
+          <div className="flex h-14 items-center justify-between px-3 rounded-full border border-black/5 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-2xl shadow-lg">
+            <Link to="/" className="flex items-center gap-2 pl-3">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
+                <Palmtree className="h-4 w-4" />
+              </div>
+              <span className="hidden sm:inline text-sm font-bold tracking-tight">
+                Apa<span className="text-primary">murahbanget</span>
+              </span>
+            </Link>
+            <div className="flex items-center gap-2 pr-1">
+              <Link
+                to="/villas"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary"
               >
-                <LazyImage
-                  eager
-                  src={villa.images[0]}
-                  alt={villa.name}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
-                  aspectRatio="16/9"
-                />
-              </button>
-              {/* 4 small thumbnails */}
-              {villa.images.slice(1, 5).map((src, i) => {
-                const realIdx = i + 1;
-                const isLast = i === 3 && villa.images.length > 5;
-                return (
-                  <button
-                    key={realIdx}
-                    onClick={() => openLightbox(realIdx)}
-                    className="relative overflow-hidden"
-                    aria-label={`Foto ${realIdx + 1}`}
-                  >
-                    <LazyImage
-                      src={src}
-                      alt={`${villa.name} ${realIdx + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                      aspectRatio="1/1"
-                    />
-                    {isLast && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/55 text-white">
-                        <div className="text-center">
-                          <p className="text-xl font-bold">+{villa.images.length - 5}</p>
-                          <p className="text-[11px] opacity-80">foto</p>
-                        </div>
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
+                <ArrowLeft className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Kembali</span>
+              </Link>
+              <WhatsAppButton size="sm" label="Pesan WA" message={waMessage} className="rounded-full" />
             </div>
-
-            {/* Desktop: Airbnb 5-grid mosaic */}
-            <div className="hidden sm:grid sm:grid-cols-4 sm:grid-rows-2 sm:gap-2 sm:overflow-hidden sm:rounded-2xl"
-                 style={{ height: "460px" }}>
-              {/* Big main image — spans 2 cols 2 rows */}
-              <button
-                className="col-span-2 row-span-2 overflow-hidden"
-                onClick={() => openLightbox(0)}
-                aria-label="Buka galeri foto"
-              >
-                <LazyImage
-                  eager
-                  src={villa.images[0]}
-                  alt={villa.name}
-                  className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
-                  aspectRatio="1/1"
-                />
-              </button>
-              {/* 4 side images */}
-              {villa.images.slice(1, 5).map((src, i) => {
-                const realIdx = i + 1;
-                const isLast = i === 3 && villa.images.length > GRID_COUNT;
-                return (
-                  <button
-                    key={realIdx}
-                    onClick={() => openLightbox(realIdx)}
-                    className="relative overflow-hidden"
-                    aria-label={`Foto ${realIdx + 1}`}
-                  >
-                    <LazyImage
-                      src={src}
-                      alt={`${villa.name} ${realIdx + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                      aspectRatio="4/3"
-                    />
-                    {isLast && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/55 text-white">
-                        <div className="text-center">
-                          <p className="text-2xl font-bold">+{villa.images.length - GRID_COUNT}</p>
-                          <p className="text-sm opacity-80">foto lagi</p>
-                        </div>
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* "Show all photos" floating button — desktop */}
-            <button
-              onClick={() => openLightbox(0)}
-              className="absolute bottom-3 right-3 hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/90 px-3 py-2 text-xs font-semibold text-foreground shadow-md backdrop-blur-sm hover:bg-white transition-colors"
-            >
-              <LayoutGrid className="h-3.5 w-3.5" />
-              Lihat semua {villa.images.length} foto
-            </button>
-
-            {/* Mobile "show all" button */}
-            <button
-              onClick={() => openLightbox(0)}
-              className="mt-2 flex sm:hidden w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-card py-2.5 text-xs font-semibold text-foreground hover:bg-secondary transition-colors"
-            >
-              <LayoutGrid className="h-3.5 w-3.5" />
-              Lihat semua {villa.images.length} foto
-            </button>
           </div>
+        </header>
+      </div>
 
-
+      <div className="mx-auto max-w-7xl px-4 pt-28 pb-12 sm:px-6">
+        
+        {/* Header Title Section */}
+        <section className="mb-8 animate-fade-up">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary border border-primary/20">
+              {villa.tag}
+            </span>
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs font-bold border border-border">
+              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+              <span>{villa.rating}</span>
+              <span className="text-muted-foreground font-medium">({villa.reviews} ulasan)</span>
+            </div>
+          </div>
+          <h1 className="font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl max-w-3xl">
+            {villa.name}
+          </h1>
+          <div className="mt-4 flex items-center gap-1.5 text-muted-foreground">
+            <MapPin className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold uppercase tracking-widest">{villa.area}, Batu</span>
+          </div>
         </section>
 
-        {/* ── MAIN CONTENT ── */}
-        <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
+        {/* ── CINEMATIC GALLERY ── */}
+        <section aria-label="Galeri foto" className="mb-12 animate-fade-in delay-200">
+          <div className="group relative p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 overflow-hidden">
+            <div className="relative overflow-hidden rounded-[calc(2.5rem-0.375rem)] shadow-2xl">
+              
+              {/* Desktop: 5-grid mosaic */}
+              <div className="hidden md:grid grid-cols-4 grid-rows-2 gap-2 h-[560px]">
+                <button
+                  className="col-span-2 row-span-2 overflow-hidden relative group/hero"
+                  onClick={() => openLightbox(0)}
+                >
+                  <LazyImage
+                    eager
+                    src={villa.images[0]}
+                    alt={villa.name}
+                    className="h-full w-full object-cover transition-transform duration-1000 group-hover/hero:scale-[1.05]"
+                    aspectRatio="1/1"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover/hero:bg-transparent transition-colors duration-500" />
+                </button>
+                {villa.images.slice(1, 5).map((src, i) => {
+                  const isLast = i === 3 && villa.images.length > 5;
+                  return (
+                    <button
+                      key={src}
+                      onClick={() => openLightbox(i + 1)}
+                      className="relative overflow-hidden group/thumb"
+                    >
+                      <LazyImage
+                        src={src}
+                        alt={`${villa.name} ${i + 2}`}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover/thumb:scale-[1.08]"
+                        aspectRatio="4/3"
+                      />
+                      <div className="absolute inset-0 bg-black/10 group-hover/thumb:bg-transparent transition-colors duration-500" />
+                      {isLast && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white backdrop-blur-[2px]">
+                          <p className="text-3xl font-black">+{villa.images.length - 5}</p>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Foto Lagi</p>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
 
-          {/* Left */}
-          <section>
-            {/* Title */}
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
-                    {villa.tag}
-                  </span>
-                  <div className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-0.5 text-xs font-medium">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold text-foreground">{villa.rating}</span>
-                    <span className="text-muted-foreground">({villa.reviews})</span>
-                  </div>
+              {/* Mobile: Scrollable Slider or Stack */}
+              <div className="md:hidden flex flex-col gap-2">
+                 <button
+                  className="w-full h-64 overflow-hidden relative"
+                  onClick={() => openLightbox(0)}
+                >
+                  <LazyImage
+                    eager
+                    src={villa.images[0]}
+                    alt={villa.name}
+                    className="h-full w-full object-cover"
+                    aspectRatio="16/9"
+                  />
+                </button>
+                <div className="grid grid-cols-2 gap-2 px-0">
+                  {villa.images.slice(1, 3).map((src, i) => (
+                    <button
+                      key={src}
+                      onClick={() => openLightbox(i + 1)}
+                      className="relative h-32 overflow-hidden"
+                    >
+                      <LazyImage
+                        src={src}
+                        alt={`${villa.name} ${i + 2}`}
+                        className="h-full w-full object-cover"
+                        aspectRatio="4/3"
+                      />
+                    </button>
+                  ))}
                 </div>
-                <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl" style={{ textWrap: "balance" }}>
-                  {villa.name}
-                </h1>
-                <p className="mt-1 inline-flex items-center gap-1 text-sm text-muted-foreground">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" /> {villa.area}
+              </div>
+
+              {/* "Show all photos" floating button */}
+              <button
+                onClick={() => openLightbox(0)}
+                className="absolute bottom-6 right-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-5 py-2.5 text-xs font-bold text-white shadow-xl backdrop-blur-md hover:bg-black/80 transition-all active:scale-95"
+              >
+                <LayoutGrid className="h-4 w-4" />
+                Lihat {villa.images.length} Foto
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ── CONTENT GRID ── */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_380px]">
+
+          {/* Left Column: Details */}
+          <section className="animate-fade-up delay-300">
+            {/* Specs Hub */}
+            <div className="grid grid-cols-3 gap-3 p-1.5 rounded-3xl bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 mb-10">
+              <Spec icon={BedDouble} label={`${villa.bedrooms} Kamar`} sub="Tidur" />
+              <Spec icon={Bath} label={`${villa.bathrooms} Kamar`} sub="Mandi" />
+              <Spec icon={Users} label={`Hingga ${villa.guests}`} sub="Tamu" />
+            </div>
+
+            <div className="space-y-12">
+              <div className="prose prose-sm sm:prose-base dark:prose-invert">
+                <h2 className="font-serif text-3xl tracking-tight mb-4">Tentang Villa</h2>
+                <p className="text-muted-foreground leading-relaxed text-lg" style={{ textWrap: "pretty" }}>
+                  {villa.description}
                 </p>
               </div>
-            </div>
 
-            {/* Specs */}
-            <div className="mt-5 grid grid-cols-3 gap-2 rounded-2xl border border-border bg-card p-4">
-              <Spec icon={BedDouble} label={`${villa.bedrooms} Kamar Tidur`} />
-              <Spec icon={Bath} label={`${villa.bathrooms} Kamar Mandi`} />
-              <Spec icon={Users} label={`s/d ${villa.guests} Tamu`} />
-            </div>
-
-            {/* Mobile booking block */}
-            <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4 lg:hidden">
-              <PricingBlock villa={villa} />
-              <div className="mt-4 flex flex-col gap-2">
-                <WhatsAppButton size="lg" label="Pesan via WhatsApp" message={waMessage} className="w-full" />
-                <a
-                  href={`tel:+${WA_NUMBER}`}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  <Phone className="h-4 w-4" /> {WA_DISPLAY}
-                </a>
+              <div className="pt-10 border-t border-border/60">
+                <h2 className="font-serif text-3xl tracking-tight mb-6">Fasilitas Utama</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {villa.amenities.map((a) => (
+                    <div
+                      key={a}
+                      className="flex items-center gap-3 p-4 rounded-2xl bg-card border border-border shadow-sm group hover:border-primary/30 transition-colors"
+                    >
+                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        <Check className="h-5 w-5" />
+                      </div>
+                      <span className="text-sm font-bold text-foreground">{a}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Description */}
-            <div className="mt-7 border-t border-border pt-7">
-              <h2 className="text-lg font-semibold text-foreground">Tentang Villa</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base max-w-prose" style={{ textWrap: "pretty" }}>
-                {villa.description}
-              </p>
-            </div>
-
-            {/* Facilities */}
-            <div className="mt-7 border-t border-border pt-7">
-              <h2 className="text-lg font-semibold text-foreground">Fasilitas</h2>
-              <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {villa.amenities.map((a) => (
-                  <li
-                    key={a}
-                    className="flex items-center gap-2.5 rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground"
-                  >
-                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-                      <Check className="h-3.5 w-3.5" />
-                    </span>
-                    {a}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-
-
-            {/* House rules */}
-            <div className="mt-7 border-t border-border pt-7">
-              <h2 className="text-lg font-semibold text-foreground">Aturan Menginap</h2>
-              <ul className="mt-4 space-y-3 text-sm text-foreground">
-                <li className="flex items-start gap-3">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  Check-in mulai pukul 14.00, check-out maksimal 12.00
-                </li>
-                <li className="flex items-start gap-3">
-                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  DP 50% untuk konfirmasi booking, pelunasan saat check-in
-                </li>
-                <li className="flex items-start gap-3">
-                  <Users className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  Tamu sesuai kapasitas, biaya tambahan untuk extra bed
-                </li>
-              </ul>
+              <div className="pt-10 border-t border-border/60">
+                <h2 className="font-serif text-3xl tracking-tight mb-6">Aturan & Ketentuan</h2>
+                <div className="grid gap-4">
+                  {[
+                    { icon: Clock, label: "Check-in 14.00, Check-out 12.00" },
+                    { icon: ShieldCheck, label: "DP 50% untuk konfirmasi booking" },
+                    { icon: Users, label: "Tamu sesuai kapasitas yang tertera" },
+                  ].map((rule) => (
+                    <div key={rule.label} className="flex items-center gap-4 p-5 rounded-2xl bg-secondary/30 border border-border/40">
+                      <rule.icon className="h-6 w-6 text-primary" />
+                      <span className="text-sm font-bold text-foreground">{rule.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* Right — sticky booking (desktop) */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-20 rounded-2xl border border-border bg-card p-5 shadow-[0_4px_24px_-8px_rgb(20_50_90/0.12)]">
-              <PricingBlock villa={villa} />
-              <div className="mt-5 flex flex-col gap-2">
-                <WhatsAppButton size="lg" label="Pesan via WhatsApp" message={waMessage} className="w-full" />
-                <a
-                  href={`tel:+${WA_NUMBER}`}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
-                >
-                  <Phone className="h-4 w-4" /> {WA_DISPLAY}
-                </a>
-              </div>
+          {/* Right Column: Sticky Booking Card */}
+          <aside className="relative">
+            <div className="sticky top-28 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10 animate-fade-up delay-500">
+              <div className="bg-card rounded-[calc(2.5rem-0.375rem)] p-6 sm:p-8 shadow-2xl border border-border/60">
+                <PricingBlock villa={villa} />
+                
+                <div className="mt-8 space-y-3">
+                  <WhatsAppButton size="lg" label="Pesan Lewat WhatsApp" message={waMessage} className="w-full h-14 text-base font-black rounded-full shadow-xl shadow-primary/20" />
+                  <a
+                    href={`tel:+${WA_NUMBER}`}
+                    className="flex h-14 w-full items-center justify-center gap-3 rounded-full border border-border bg-background px-4 text-sm font-bold text-foreground hover:bg-secondary transition-all active:scale-95"
+                  >
+                    <Phone className="h-5 w-5 text-primary" /> {WA_DISPLAY}
+                  </a>
+                </div>
 
-              <div className="mt-5 space-y-2 border-t border-border pt-4 text-xs text-muted-foreground">
-                <p className="flex items-center gap-2">
-                  <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0" />
-                  Villa diverifikasi tim Apamurahbanget
-                </p>
-                <p className="flex items-center gap-2">
-                  <Clock className="h-3.5 w-3.5 text-primary shrink-0" />
-                  Respons WhatsApp cepat
-                </p>
+                <div className="mt-8 pt-6 border-t border-border/60 space-y-4">
+                  <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
+                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                    Bisa pesan sekarang (Instant Booking)
+                  </div>
+                  <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
+                    <ShieldCheck className="h-4 w-4 text-primary" />
+                    Pembayaran aman & terverifikasi
+                  </div>
+                </div>
               </div>
             </div>
           </aside>
@@ -361,16 +316,19 @@ function VillaDetail() {
 
         {/* Similar villas */}
         {similar.length > 0 && (
-          <section className="mt-14 sm:mt-20">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                Villa lainnya
-              </h2>
-              <Link to="/villas" className="text-sm font-medium text-primary hover:underline">
-                Lihat semua →
+          <section className="mt-24 pt-20 border-t border-border/60">
+            <div className="flex items-end justify-between gap-4 mb-10">
+              <div>
+                <h2 className="font-serif text-4xl tracking-tight text-foreground">
+                  Rekomendasi Lainnya
+                </h2>
+                <p className="mt-2 text-muted-foreground font-medium">Pilihan serupa yang mungkin kamu suka</p>
+              </div>
+              <Link to="/villas" className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
+                Lihat Semua <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
               {similar.map((v) => (
                 <VillaCard key={v.slug} villa={v} />
               ))}
@@ -384,50 +342,49 @@ function VillaDetail() {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function Spec({ icon: Icon, label }: { icon: typeof BedDouble; label: string }) {
+function Spec({ icon: Icon, label, sub }: { icon: any; label: string; sub: string }) {
   return (
-    <div className="flex flex-col items-center gap-2 text-center">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-        <Icon className="h-4 w-4" />
-      </span>
-      <span className="text-xs font-medium text-foreground leading-snug">{label}</span>
+    <div className="flex flex-col items-center justify-center py-6 px-4 rounded-[2rem] bg-card border border-border/60 shadow-sm">
+      <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/5 text-primary mb-3">
+        <Icon className="h-6 w-6" />
+      </div>
+      <span className="text-sm font-black text-foreground leading-none">{label}</span>
+      <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{sub}</span>
     </div>
   );
 }
 
 function PricingBlock({ villa }: { villa: Villa }) {
   return (
-    <div>
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-        Harga sewa per malam
-      </p>
-      <div className="mt-3 space-y-2">
-        <div className="flex items-center justify-between rounded-xl bg-background px-3.5 py-3 border border-border">
+    <div className="space-y-6">
+      <div>
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+          Harga Per Malam
+        </span>
+        <div className="mt-3 flex items-center justify-between p-4 rounded-2xl bg-primary/5 border border-primary/10">
           <div>
-            <p className="text-[11px] text-muted-foreground mb-0.5">Weekday</p>
-            <p className="text-lg font-bold text-foreground tabular-nums leading-none">
+            <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Weekday</p>
+            <p className="text-2xl font-black text-foreground tabular-nums leading-none">
               {formatIDR(villa.price)}
             </p>
           </div>
-          <span className="rounded-lg bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground">
-            Sen – Jum
-          </span>
-        </div>
-        <div className="flex items-center justify-between rounded-xl bg-primary/5 px-3.5 py-3 border border-primary/20">
-          <div>
-            <p className="text-[11px] text-primary/70 mb-0.5">Weekend</p>
-            <p className="text-lg font-bold text-primary tabular-nums leading-none">
-              {formatIDR(villa.priceWeekend)}
-            </p>
-          </div>
-          <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
-            Sab – Min
+          <span className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary uppercase tracking-widest">
+            Senin-Kamis
           </span>
         </div>
       </div>
-      <p className="mt-2 text-[11px] text-muted-foreground">
-        * Harga dapat berubah sesuai musim & ketersediaan
-      </p>
+      
+      <div className="flex items-center justify-between p-4 rounded-2xl bg-accent/5 border border-accent/10">
+        <div>
+          <p className="text-[10px] font-bold text-accent/60 uppercase tracking-widest mb-1">Weekend</p>
+          <p className="text-2xl font-black text-foreground tabular-nums leading-none">
+            {formatIDR(villa.priceWeekend)}
+          </p>
+        </div>
+        <span className="rounded-full bg-accent/10 px-3 py-1 text-[10px] font-bold text-accent uppercase tracking-widest">
+          Jumat-Minggu
+        </span>
+      </div>
     </div>
   );
 }

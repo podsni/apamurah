@@ -33,57 +33,51 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Navigasi utama"
-      className="fixed inset-x-0 bottom-0 z-40 lg:hidden"
-      style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom))" }}
+      className="fixed inset-x-0 bottom-0 z-40 lg:hidden pb-[env(safe-area-inset-bottom)]"
     >
-      <div className="border-t border-border/40 bg-background/92 backdrop-blur-xl">
-        <ul className="mx-auto grid max-w-md grid-cols-3 px-1 py-1">
-          {items.map((it) => {
-            const active = it.match(path);
-            const Icon = it.icon;
+      <div className="mx-auto max-w-lg px-4 pb-4">
+        <div className="bg-black/80 dark:bg-white/80 backdrop-blur-2xl rounded-[2rem] border border-white/10 dark:border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden">
+          <ul className="grid grid-cols-3 h-16">
+            {items.map((it) => {
+              const active = it.match(path);
+              const Icon = it.icon;
 
-            return (
-              <li key={it.key} className="flex">
-                <Link
-                  to={it.to}
-                  className="flex w-full items-center justify-center active:scale-95 transition-transform duration-100"
-                >
-                  <span className="relative flex flex-col items-center gap-0.5 py-1.5 px-2 w-full">
-                    {active && (
-                      <span className="absolute inset-x-1 top-0.5 h-8 rounded-xl bg-primary/10" />
-                    )}
-                    <span
-                      className={
-                        "relative z-10 transition-all duration-200 " +
-                        (active ? "text-primary scale-110" : "text-muted-foreground")
-                      }
-                    >
+              return (
+                <li key={it.key} className="relative">
+                  <Link
+                    to={it.to}
+                    aria-current={active ? "page" : undefined}
+                    className="flex flex-col items-center justify-center w-full h-full gap-1 transition-all duration-300"
+                  >
+                    <div className="relative group">
+                      <div className={`absolute -inset-3 rounded-full transition-all duration-500 ${active ? "bg-primary/20 scale-100 opacity-100 blur-md" : "scale-0 opacity-0"}`} />
                       <Icon
                         className={
-                          "transition-all duration-200 " +
+                          "relative z-10 transition-all duration-500 " +
                           (active
-                            ? "h-5 w-5 stroke-[2.2]" + (it.key === "fav" ? " fill-red-500 stroke-red-500" : "")
-                            : "h-5 w-5 stroke-[1.8]")
+                            ? "h-5 w-5 stroke-[2.5] text-white dark:text-black " +
+                              (it.key === "fav" ? "fill-red-500 stroke-red-500" : "")
+                            : "h-5 w-5 stroke-[2] text-white/50 dark:text-black/50 group-hover:text-white/80")
                         }
                       />
-                    </span>
+                    </div>
                     <span
                       className={
-                        "relative z-10 text-[10px] font-medium leading-none transition-all duration-200 " +
-                        (active ? "text-primary" : "text-muted-foreground")
+                        "text-[9px] font-black uppercase tracking-[0.1em] transition-all duration-500 " +
+                        (active ? "text-white dark:text-black" : "text-white/40 dark:text-black/40")
                       }
                     >
                       {it.label}
                     </span>
-                    {active && (
-                      <span className="absolute bottom-0 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary" />
-                    )}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                  </Link>
+                  {active && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-b-full shadow-[0_0_15px_rgba(var(--primary),0.5)] animate-fade-in" />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </nav>
   );

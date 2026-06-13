@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 function NotFoundComponent() {
   return (
@@ -113,7 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300..600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300..600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap",
       },
       {
         rel: "stylesheet",
@@ -129,11 +130,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="id" className="bg-background text-foreground">
       <head>
+        <meta name="theme-color" content="#1c4a8c" />
         <HeadContent />
       </head>
-      <body>
+      <body className="min-h-dvh antialiased">
         {children}
         <Scripts />
       </body>
@@ -146,9 +148,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="pb-16 lg:pb-0">
+      <div className="min-h-dvh pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
         <Outlet />
       </div>
+      <ScrollToTop />
       <MobileBottomNav />
     </QueryClientProvider>
   );

@@ -39,14 +39,22 @@ export function WhatsAppButton({
       rel="noopener noreferrer"
       aria-label={label}
       className={cn(
-        "inline-flex items-center justify-center rounded-md font-semibold transition-opacity",
+        "press inline-flex items-center justify-center rounded-xl font-bold transition-all duration-300",
         sizeMap[size],
         variantMap[variant],
         className,
       )}
     >
-      <MessageCircle className={size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4"} />
-      {!iconOnly && <span>{label}</span>}
+      <div className="relative">
+         <MessageCircle className={size === "sm" ? "h-3.5 w-3.5" : "h-4.5 w-4.5"} />
+         {variant === "primary" && (
+           <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+             <span className="relative inline-flex rounded-full h-2 w-2 bg-white/20"></span>
+           </span>
+         )}
+      </div>
+      {!iconOnly && <span className="tracking-tight">{label}</span>}
     </a>
   );
 }

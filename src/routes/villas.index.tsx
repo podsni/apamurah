@@ -127,168 +127,144 @@ function VillasList() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground antialiased">
-      <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
-              <Palmtree className="h-5 w-5" />
-            </div>
-            <span className="hidden text-[15px] font-semibold tracking-tight text-foreground sm:inline sm:text-[17px]">
-              Apa<span className="text-primary">murahbanget</span>
-            </span>
-          </Link>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate({ search: (prev: SearchValues) => ({ ...prev, q: qInput }), replace: true });
-            }}
-            className="flex h-11 flex-1 items-center gap-2 rounded-full border border-border bg-card px-3 shadow-[var(--shadow-soft)] sm:max-w-md"
-          >
-            <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <input
-              value={qInput}
-              onChange={(e) => setQInput(e.target.value)}
-              type="search"
-              placeholder="Cari villa, area…"
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-            />
-            {qInput && (
-              <button
-                type="button"
-                onClick={() => {
-                  setQInput("");
-                  navigate({ search: (prev: SearchValues) => ({ ...prev, q: "" }), replace: true });
-                }}
-                className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground hover:bg-secondary"
-                aria-label="Bersihkan"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </form>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-7xl px-4 pb-28 pt-5 sm:px-6 sm:pb-10 sm:pt-8">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" /> Kembali ke beranda
+    <main className="min-h-screen bg-background text-foreground antialiased selection:bg-primary/20">
+      
+      {/* Floating Header Hub */}
+      <div className="fixed top-6 inset-x-0 z-40 px-4 pointer-events-none">
+        <header className="mx-auto max-w-7xl pointer-events-auto">
+          <div className="flex h-14 items-center justify-between px-3 rounded-full border border-black/5 dark:border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur-2xl shadow-lg">
+            <Link to="/" className="flex items-center gap-2 pl-3">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
+                <Palmtree className="h-4 w-4" />
+              </div>
+              <span className="hidden sm:inline text-sm font-bold tracking-tight">
+                Apa<span className="text-primary">murahbanget</span>
+              </span>
             </Link>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-              Villa di Batu
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {results.length} villa ditemukan{search.q && ` untuk "${search.q}"`}
-            </p>
-          </div>
-          <div className="hidden items-center gap-2 lg:flex">
-            <div className="relative">
-              <select
-                value={search.sort}
-                onChange={(e) =>
-                  navigate({
-                    search: (prev: SearchValues) => ({
-                      ...prev,
-                      sort: e.target.value as SearchValues["sort"],
-                    }),
-                    replace: true,
-                  })
-                }
-                className="appearance-none rounded-xl border border-border bg-card pl-4 pr-9 py-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer shadow-[var(--shadow-soft)]"
+
+            {/* Search Hub */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate({ search: (prev: SearchValues) => ({ ...prev, q: qInput }), replace: true });
+              }}
+              className="flex-1 max-w-md mx-4 hidden sm:block"
+            >
+              <div className="relative group">
+                <SearchIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <input
+                  value={qInput}
+                  onChange={(e) => setQInput(e.target.value)}
+                  placeholder="Cari villa atau area..."
+                  className="w-full h-10 pl-10 pr-4 rounded-full bg-black/5 dark:bg-white/5 border border-transparent focus:border-primary/20 focus:bg-background transition-all outline-none text-sm font-medium"
+                />
+              </div>
+            </form>
+
+            <div className="flex items-center gap-2 pr-1">
+               <button
+                onClick={() => setSortOpen(true)}
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary lg:hidden"
               >
-                <option value="recommended">Rekomendasi</option>
-                <option value="price-asc">Harga Termurah</option>
-                <option value="price-desc">Harga Termahal</option>
-                <option value="rating">Rating Tertinggi</option>
-              </select>
-              <ArrowUpDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                <ArrowUpDown className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => setFiltersOpen(true)}
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-bold transition-all hover:bg-secondary lg:hidden"
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+                {activeCount > 0 && (
+                  <span className="grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] text-white">
+                    {activeCount}
+                  </span>
+                )}
+              </button>
+              <WhatsAppButton size="sm" label="Konsultasi" message="Halo, saya butuh bantuan cari villa." className="rounded-full hidden md:inline-flex" />
             </div>
           </div>
-        </div>
+        </header>
+      </div>
 
-        {activeCount > 0 && (
-          <div className="mt-4 flex flex-wrap items-center gap-2 lg:hidden">
-            <span className="text-xs text-muted-foreground">Filter aktif:</span>
-            {search.area.map((a: string) => (
-              <button
-                key={a}
-                onClick={() =>
-                  handleFilterChange({ areas: search.area.filter((x: string) => x !== a) })
-                }
-                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
-              >
-                {a} <X className="h-3 w-3" />
-              </button>
-            ))}
-            {search.category.map((c: string) => (
-              <button
-                key={c}
-                onClick={() =>
-                  handleFilterChange({ categories: search.category.filter((x: string) => x !== c) })
-                }
-                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
-              >
-                {c} <X className="h-3 w-3" />
-              </button>
-            ))}
-            {search.amenity.map((a: string) => (
-              <button
-                key={a}
-                onClick={() =>
-                  handleFilterChange({ amenities: search.amenity.filter((x: string) => x !== a) })
-                }
-                className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground"
-              >
-                {a} <X className="h-3 w-3" />
-              </button>
-            ))}
-            <button
-              onClick={handleReset}
-              className="text-[11px] font-medium text-primary hover:underline"
-            >
-              Bersihkan
-            </button>
+      <div className="mx-auto max-w-7xl px-4 pt-28 pb-16 sm:px-6">
+        
+        {/* Page Header */}
+        <section className="mb-10 animate-fade-up">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Link to="/" className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                  Beranda
+                </Link>
+                <span className="text-[10px] text-muted-foreground/40">/</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-foreground">Semua Villa</span>
+              </div>
+              <h1 className="font-serif text-4xl leading-tight tracking-tight sm:text-5xl">
+                Villa di Batu
+              </h1>
+              <p className="mt-2 text-muted-foreground font-medium">
+                Ditemukan {results.length} villa pilihan yang siap kamu booking.
+              </p>
+            </div>
+            
+            <div className="hidden lg:block">
+              <div className="relative p-1 rounded-full bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
+                <select
+                  value={search.sort}
+                  onChange={(e) =>
+                    handleFilterChange({ sort: e.target.value as any })
+                  }
+                  className="appearance-none bg-transparent h-10 pl-5 pr-10 text-xs font-bold uppercase tracking-widest text-foreground focus:outline-none cursor-pointer"
+                >
+                  <option value="recommended">Rekomendasi</option>
+                  <option value="price-asc">Harga Termurah</option>
+                  <option value="price-desc">Harga Termahal</option>
+                  <option value="rating">Rating Tertinggi</option>
+                </select>
+                <ArrowUpDown className="absolute right-4 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+              </div>
+            </div>
           </div>
-        )}
+        </section>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 rounded-2xl border border-border/60 bg-card p-5 shadow-[var(--shadow-soft)]">
-              <VillaFilters values={values} onChange={handleFilterChange} onReset={handleReset} />
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[280px_1fr]">
+          
+          {/* Sidebar Filter */}
+          <aside className="hidden lg:block animate-fade-in delay-200">
+            <div className="sticky top-28 p-1.5 rounded-[2.5rem] bg-black/5 dark:bg-white/5 border border-black/[0.03] dark:border-white/10">
+              <div className="bg-card rounded-[calc(2.5rem-0.375rem)] p-6 border border-border/60">
+                <VillaFilters values={values} onChange={handleFilterChange} onReset={handleReset} />
+              </div>
             </div>
           </aside>
 
-          <section>
+          {/* Results Grid */}
+          <section className="animate-fade-up delay-300">
             {results.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">
-                <h2 className="text-lg font-semibold text-foreground">
-                  Tidak ada villa yang cocok
-                </h2>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Coba ubah filter, atau chat tim kami untuk rekomendasi.
-                </p>
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
-                  <button
-                    onClick={handleReset}
-                    className="rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary"
-                  >
-                    Reset Filter
-                  </button>
-                  <WhatsAppButton
-                    message="Halo, saya butuh bantuan cari villa di Batu sesuai preferensi saya."
-                    label="Konsultasi WA"
-                  />
+              <div className="flex flex-col items-center justify-center p-12 rounded-[2.5rem] border border-dashed border-border bg-secondary/10 text-center">
+                <div className="grid h-16 w-16 place-items-center rounded-3xl bg-primary/5 text-primary/40 mb-6">
+                  <SearchIcon className="h-8 w-8" />
                 </div>
+                <h2 className="text-xl font-bold text-foreground">Tidak Ada Hasil</h2>
+                <p className="mt-2 text-muted-foreground max-w-xs">
+                  Coba ubah filter atau kata kunci pencarianmu untuk melihat pilihan lainnya.
+                </p>
+                <button
+                  onClick={handleReset}
+                  className="mt-8 px-6 py-2.5 rounded-full bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                >
+                  Reset Semua Filter
+                </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
-                {results.map((v) => (
-                  <VillaCard key={v.slug} villa={v} />
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
+                {results.map((v, i) => (
+                  <div 
+                    key={v.slug} 
+                    className="animate-fade-up" 
+                    style={{ animationDelay: `${i * 50}ms` }}
+                  >
+                    <VillaCard villa={v} />
+                  </div>
                 ))}
               </div>
             )}
@@ -296,28 +272,57 @@ function VillasList() {
         </div>
       </div>
 
+      {/* Mobile Bottom Filter Bar */}
+      <div className="fixed bottom-20 inset-x-0 z-40 px-4 flex justify-center lg:hidden pointer-events-none">
+         <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl pointer-events-auto animate-fade-up">
+            <button
+              onClick={() => setFiltersOpen(true)}
+              className="flex items-center gap-2 h-11 px-6 rounded-full bg-white text-black text-xs font-black uppercase tracking-widest transition-transform active:scale-95"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              Filter
+              {activeCount > 0 && (
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-primary text-[10px] text-white">
+                  {activeCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setSortOpen(true)}
+              className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white border border-white/10 transition-transform active:scale-95"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+            </button>
+         </div>
+      </div>
+
+      {/* Mobile Modals */}
+
       {filtersOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setFiltersOpen(false)} />
-          <div className="relative mt-auto flex max-h-[88vh] w-full flex-col rounded-t-2xl bg-background shadow-xl">
-            <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-muted" />
-            <div className="flex items-center justify-between border-b border-border px-4 py-3">
-              <h2 className="text-sm font-semibold text-foreground">Filter Villa</h2>
+        <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setFiltersOpen(false)} />
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="relative mt-auto flex max-h-[90vh] w-full flex-col rounded-t-[2.5rem] bg-background shadow-2xl overflow-hidden"
+          >
+            <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-muted" />
+            <div className="flex items-center justify-between px-6 py-5 border-b border-border/60">
+              <h2 className="text-xl font-black tracking-tight text-foreground">Filter Villa</h2>
               <button
                 onClick={() => setFiltersOpen(false)}
-                aria-label="Tutup"
-                className="grid h-9 w-9 place-items-center rounded-md text-foreground hover:bg-secondary"
+                className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-foreground hover:bg-muted transition-colors"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-5">
+            <div className="flex-1 overflow-y-auto p-6 pb-24">
               <VillaFilters values={values} onChange={handleFilterChange} onReset={handleReset} />
             </div>
-            <div className="border-t border-border p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-background via-background to-transparent pt-10">
               <button
                 onClick={() => setFiltersOpen(false)}
-                className="w-full rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+                className="w-full h-14 rounded-full bg-primary text-base font-black text-white shadow-xl shadow-primary/20 active:scale-95 transition-all"
               >
                 Lihat {results.length} Villa
               </button>
@@ -327,12 +332,16 @@ function VillasList() {
       )}
 
       {sortOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setSortOpen(false)} />
-          <div className="relative mt-auto w-full rounded-t-2xl bg-background pb-[max(1rem,env(safe-area-inset-bottom))] shadow-xl">
-            <div className="mx-auto mt-2 h-1.5 w-12 rounded-full bg-muted" />
-            <div className="px-4 py-3 text-sm font-semibold text-foreground">Urutkan</div>
-            <div className="flex flex-col">
+        <div className="fixed inset-0 z-[60] flex lg:hidden animate-fade-in">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSortOpen(false)} />
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="relative mt-auto w-full rounded-t-[2.5rem] bg-background p-6 shadow-2xl"
+          >
+            <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-muted" />
+            <h2 className="mb-6 text-xl font-black tracking-tight text-foreground px-2">Urutkan</h2>
+            <div className="flex flex-col gap-2">
               {[
                 { v: "recommended", l: "Rekomendasi" },
                 { v: "price-asc", l: "Harga Termurah" },
@@ -344,56 +353,24 @@ function VillasList() {
                   <button
                     key={opt.v}
                     onClick={() => {
-                      navigate({
-                        search: (prev: SearchValues) => ({
-                          ...prev,
-                          sort: opt.v as SearchValues["sort"],
-                        }),
-                        replace: true,
-                      });
+                      handleFilterChange({ sort: opt.v as any });
                       setSortOpen(false);
                     }}
-                    className={
-                      "flex items-center justify-between px-4 py-3.5 text-left text-sm " +
-                      (active ? "font-semibold text-primary" : "text-foreground")
-                    }
+                    className={`flex items-center justify-between px-5 py-4 rounded-2xl text-sm font-bold transition-all ${
+                      active ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-secondary/50 text-foreground hover:bg-secondary"
+                    }`}
                   >
                     {opt.l}
-                    {active && <span className="text-primary">✓</span>}
+                    {active && <span className="text-white">✓</span>}
                   </button>
                 );
               })}
             </div>
+            <div className="mt-8 pb-[env(safe-area-inset-bottom)]" />
           </div>
         </div>
       )}
 
-      {/* Mobile bottom bar — sits above the global MobileBottomNav */}
-      <div className="fixed inset-x-0 bottom-14 z-30 lg:hidden">
-        <div className="border-t border-border/50 bg-background/95 px-3 py-2 backdrop-blur-md shadow-[0_-2px_12px_rgb(0,0,0,0.06)]">
-          <div className="mx-auto flex max-w-md items-center gap-2">
-            <button
-              onClick={() => setFiltersOpen(true)}
-              className="relative inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-card text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              Filter
-              {activeCount > 0 && (
-                <span className="ml-0.5 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">
-                  {activeCount}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setSortOpen(true)}
-              className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-card text-sm font-medium text-foreground transition-colors hover:bg-secondary"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-              Urutkan
-            </button>
-          </div>
-        </div>
-      </div>
 
       <a
         href="https://wa.me/6281336664592?text=Halo%20Apamurahbanget%2C%20saya%20mau%20tanya%20villa%20di%20Batu."
