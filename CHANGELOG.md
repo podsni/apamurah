@@ -4,6 +4,16 @@ Semua perubahan penting pada project **Apamurahbanget** akan dicatat di file ini
 
 ---
 
+## [1.4.0] - 2026-06-13
+
+### Removed
+- **Section "Jelajahi Area di Batu" (`Locations`):** Komponen beserta data array `areas` (Songgoriti, Batu Kota, Bumiaji, Pujon, Coban Rondo) dihapus sepenuhnya dari halaman beranda untuk menyederhanakan struktur halaman dan mengurangi scroll depth.
+- **Quick-link Area di Hero Search Bar:** Tombol pintasan filter area (Songgoriti, Batu Kota, Bumiaji) yang muncul di bawah form pencarian dihapus agar hero tetap bersih dan fokus.
+- **Link "Area" di Navigasi:** Item menu "Area" (anchor `#areas`) dihapus dari navbar desktop maupun menu mobile overlay.
+- **Link "Area Populer" di Footer:** Tautan menuju section areas di footer juga dihapus agar konsisten.
+
+---
+
 ## [1.3.0] - 2026-06-13
 
 ### Added
